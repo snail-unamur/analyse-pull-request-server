@@ -1,0 +1,43 @@
+{
+  "name": "change-impact-detector-bot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A Probot app",
+  "author": "İsmail Sergen Göçmen",
+  "license": "ISC",
+  "homepage": "https://github.com//",
+  "type": "commonjs",
+  "keywords": [
+    "probot",
+    "github",
+    "probot-app"
+  ],
+  "scripts": {
+    "start": "probot run ./index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "@octokit/graphql": "^5.0.5",
+    "@octokit/rest": "^19.0.5",
+    "atob": "^2.1.2",
+    "axios": "^1.4.0",
+    "localtunnel": "^2.0.2",
+    "mongoose": "^6.8.4",
+    "ngrok": "^4.3.3",
+    "node-fetch": "^2.6.9",
+    "probot": "^12.2.4",
+    "simple-git": "^3.16.1"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "nock": "^13.0.5",
+    "nodemon": "^2.0.20",
+    "smee-client": "^1.2.3"
+  },
+  "engines": {
+    "node": ">= 10.13.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
