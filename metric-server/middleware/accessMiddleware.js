@@ -4,7 +4,7 @@ import retrieveAccessToken from '../utils/token.js';
 const hasAccessToRepo = async (req, res, next) => {
 	try {
 		const token = retrieveAccessToken(req.headers);
-		const { repoOwner, repoName } = req.params; // or from elsewhere
+		const { repoOwner, repoName } = req.params;
 
 		const hasAccess = await checkGitHubRepoAccess(repoOwner, repoName, token);
 
