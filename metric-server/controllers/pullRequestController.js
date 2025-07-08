@@ -4,7 +4,6 @@ import Repository from '../models/Repository.js';
 /*
  * @desc    Fetch certain pull request with a prNumber (number, not objectID)
  * @route   GET /api/:repoOwner/:repoName/pullRequest/:prNumber
- * @access  Private
  */
 const getPullRequest = asyncHandler(async (req, res) => {
 	const repoOwner = req.params.repoOwner;

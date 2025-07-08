@@ -7,7 +7,6 @@ import passport from 'passport';
 import cookieSession from 'cookie-session';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import './config/passportConfig.js';
 
 dotenv.config();
 connectToDB();
