@@ -30,7 +30,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/api/:repoName/pullRequest', pullRequestRoutes);
+app.use('/api/:repoOwner/:repoName/pullRequest', pullRequestRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

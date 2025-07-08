@@ -3,14 +3,15 @@ import Repository from '../models/Repository.js';
 
 /*
  * @desc    Fetch certain pull request with a prNumber (number, not objectID)
- * @route   GET /api/:repoName/pullRequest/:prNumber
+ * @route   GET /api/:repoOwner/:repoName/pullRequest/:prNumber
  * @access  Private
  */
 const getPullRequest = asyncHandler(async (req, res) => {
+	const repoOwner = req.params.repoOwner;
 	const repoName = req.params.repoName;
 	const prNumber = parseInt(req.params.prNumber);
 
-	const result = await Repository.find({repo_name: repoName}, "analyzed_branches").lean();
+	const result = await Repository.find({repo_name: repoName, repo_owner: repoOwner}, "analyzed_branches").lean();
 	const pullRequest = result[0].analyzed_branches[0].pullRequests.find(pullRequest => pullRequest.number === prNumber);
 
 	if (pullRequest) {
