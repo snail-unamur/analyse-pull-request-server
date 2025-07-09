@@ -7,15 +7,13 @@ const settingsSchema = new Schema({
 			{
 				metric: String,
 				checked: Boolean,
+        coefficient: Number,
 			},
 		],
 		default: [
-			{ metric: 'Risk Score', checked: true },
-			{ metric: 'Impacted Files', checked: true },
-			{ metric: 'Code Churn', checked: true },
-			{ metric: 'Previous Bug Frequency', checked: true },
-			{ metric: 'Co-changed Files', checked: true },
-			{ metric: 'Developer Statistics', checked: true },
+			{ metric: 'Code Churn', checked: true, coefficient: 1.5 },
+			{ metric: 'Previous Bug Frequency', checked: true, coefficient: 1.5 },
+			{ metric: 'Co-changed Files', checked: true, coefficient: 1.5 },
 		],
 	},
   metric_management: {
