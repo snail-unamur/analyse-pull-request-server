@@ -74,15 +74,15 @@ const incrementalHelpers = () => {
 			current_bug_frequencies: [],
 			current_code_churns: [],
 			current_co_changes: [],
-			highly_buggy_file_result: {
+			highly_buggy_file: {
 				count: 0,
 				value: 0,
 			},
-			highly_churn_file_result: {
+			highly_churn_file: {
 				count: 0,
 				value: 0,
 			},
-			pr_size_result: {
+			pr_size: {
 				value: 0,
 			},
 		}
@@ -90,7 +90,7 @@ const incrementalHelpers = () => {
 		// Update pull request pr size analysis //
 
 		const size = graphqlPullRequestInfo.additions + graphqlPullRequestInfo.deletions;
-		payloadPullRequestInfo.analysis.pr_size_result.value = size;
+		payloadPullRequestInfo.analysis.pr_size.value = size;
 
 		const pullRequest = {
 			id: payloadPullRequestInfo.id,

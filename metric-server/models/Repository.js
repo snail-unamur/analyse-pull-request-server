@@ -1,17 +1,75 @@
 import mongoose from 'mongoose';
-
 const { Schema, model } = mongoose;
 
+const settingsSchema = new Schema({
+	analysis_metrics: {
+		type: [
+			{
+				id: String,
+				name: String,
+				checked: Boolean,
+				coefficient: Number,
+			},
+		],
+		default: [
+			{ id: 'highly_churn_file', name: 'Code Churn', checked: true, coefficient: 1.5 },
+			{ id: 'highly_buggy_file', name: 'Previous Bug Frequency', checked: true, coefficient: 1.5 },
+			{ id: 'pr_size', name: 'Co-changed Files', checked: true, coefficient: 1.5 },
+		],
+	},
+	metric_management: {
+		highly_churn_file: {
+			file_threshold: { type: Number, default: 5 },
+		},
+		highly_buggy_file: {
+			file_threshold: { type: Number, default: 0.4 },
+		},
+		highly_co_change_file: {
+			file_threshold: { type: Number, default: 50 },
+		},
+	},
+	risk_value: {
+		a: {
+			lower_bound: { type: Number, default: 0 },
+			upper_bound: { type: Number, default: 20 },
+		},
+		b: {
+			lower_bound: { type: Number, default: 20 },
+			upper_bound: { type: Number, default: 40 },
+		},
+		c: {
+			lower_bound: { type: Number, default: 40 },
+			upper_bound: { type: Number, default: 60 },
+		},
+		d: {
+			lower_bound: { type: Number, default: 60 },
+			upper_bound: { type: Number, default: 80 },
+		},
+		e: {
+			lower_bound: { type: Number, default: 80 },
+			upper_bound: { type: Number, default: 100 },
+		},
+	}
+});
+
+const fileSchema = new Schema({
+	name: String,
+	path: String,
+	sha: String,
+	total_line_of_code: Number,
+	total_code_churn: Number,
+	total_buggy_pr_count: Number,
+	total_pr_count: Number,
+	total_bug_frequency: Number,
+	total_co_changes: [
+		{
+			path: String,
+			co_change_rate: Number,
+		},
+	],
+});
+
 const analysisSchema = new Schema({
-	likert_scale: {
-		user_id: Number,
-		point: Number,
-	},
-	quality_gate: {
-		status: Boolean,
-		fail_reasons: [String],
-	},
-	risk_score: { score: Number, category: Number },
 	current_code_churns: [
 		{
 			path: String,
@@ -37,23 +95,16 @@ const analysisSchema = new Schema({
 			],
 		},
 	],
-	highly_buggy_file_result: {
-		category: Number,
+	highly_buggy_file: {
+		value: Number,
 		count: Number,
 	},
-	highly_churn_file_result: {
-		category: Number,
+	highly_churn_file: {
+		value: Number,
 		count: Number,
 	},
-	pr_size_result: {
-		category: Number,
-	},
-	author_merge_rate_result: {
-		category: Number,
-	},
-	current_page_rank_result: {
-		category: Number,
-		score: { type: Number, default: 0.5 },
+	pr_size: {
+		value: Number,
 	},
 });
 
@@ -62,6 +113,7 @@ const pullRequestSchema = new Schema({
 	number: Number,
 	title: String,
 	description: String,
+	isAddedInIncrementalAnalysis: { type: Boolean, default: false },
 	sha: String,
 	url: String,
 	state: String,
@@ -77,22 +129,6 @@ const pullRequestSchema = new Schema({
 		deletions: Number,
 		changes: Number,
 	},
-	merger: {
-		name: String,
-		id: String,
-	},
-	reviewers: [
-		{
-			name: String,
-			id: String,
-		},
-	],
-	assignees: [
-		{
-			name: String,
-			id: String,
-		},
-	],
 	files: [
 		{
 			origin_sha: String,
@@ -106,17 +142,26 @@ const pullRequestSchema = new Schema({
 			changes: Number,
 		},
 	],
-	author: {
-		name: String,
-		id: String,
-		login: String,
-		cur_avg_risk_score: Number,
-		cur_pull_request_count: Number,
-		cur_merged_pull_request_count: Number,
-	},
 	analysis: analysisSchema,
 });
 
-const Repository = model('Repository', pullRequestSchema);
+const analyzedBranchSchema = new Schema({
+	branch_name: String,
+	files: [fileSchema],
+	pullRequests: [pullRequestSchema],
+});
 
+const repoSchema = new Schema({
+	repo_id: Number,
+	repo_name: String,
+	repo_owner: String,
+	repo_url: String,
+	repo_token: String,
+	is_initial_analyze_finished: { type: Boolean, default: false },
+	settings: settingsSchema,
+	overview: [{}],
+	analyzed_branches: [analyzedBranchSchema],
+});
+
+const Repository = model("Repository", repoSchema);
 export default Repository;

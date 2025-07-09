@@ -135,15 +135,15 @@ const initialHelpers = (octokit, graphqlWithAuth) => {
         current_bug_frequencies: [],
         current_code_churns: [],
         current_co_changes: [],
-        highly_buggy_file_result: {
+        highly_buggy_file: {
           count: 0,
           value: 0,
         },
-        highly_churn_file_result: {
+        highly_churn_file: {
           count: 0,
           value: 0,
         },
-        pr_size_result: {
+        pr_size: {
           value: 0,
         },
       }
@@ -215,7 +215,7 @@ const initialHelpers = (octokit, graphqlWithAuth) => {
               const size = pullRequest.additions + pullRequest.deletions;
 
               // Update pull request pr size analysis //
-              pullRequest.analysis.pr_size_result.value = size;
+              pullRequest.analysis.pr_size.value = size;
               
               pullRequest.changes = pullRequestGraphQLInfo.changes;
               pullRequest.mergedBy = pullRequestGraphQLInfo.mergedBy;

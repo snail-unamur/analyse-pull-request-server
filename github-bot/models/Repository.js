@@ -2,20 +2,21 @@ const mongoose = require("mongoose");
 const { Schema, SchemaTypes, model } = mongoose;
 
 const settingsSchema = new Schema({
-	analysis_metrics: {
-		type: [
-			{
-				metric: String,
-				checked: Boolean,
+  analysis_metrics: {
+    type: [
+      {
+        id: String,
+        name: String,
+        checked: Boolean,
         coefficient: Number,
-			},
-		],
-		default: [
-			{ metric: 'Code Churn', checked: true, coefficient: 1.5 },
-			{ metric: 'Previous Bug Frequency', checked: true, coefficient: 1.5 },
-			{ metric: 'Co-changed Files', checked: true, coefficient: 1.5 },
-		],
-	},
+      },
+    ],
+    default: [
+      { id: 'highly_churn_file', name: 'Code Churn', checked: true, coefficient: 1.5 },
+      { id: 'highly_buggy_file', name: 'Previous Bug Frequency', checked: true, coefficient: 1.5 },
+      { id: 'pr_size', name: 'Co-changed Files', checked: true, coefficient: 1.5 },
+    ],
+  },
   metric_management: {
     highly_churn_file: {
       file_threshold: { type: Number, default: 5 },
@@ -94,15 +95,15 @@ const analysisSchema = new Schema({
       ],
     },
   ],
-  highly_buggy_file_result: {
+  highly_buggy_file: {
     value: Number,
     count: Number,
   },
-  highly_churn_file_result: {
+  highly_churn_file: {
     value: Number,
     count: Number,
   },
-  pr_size_result: {
+  pr_size: {
     value: Number,
   },
 });

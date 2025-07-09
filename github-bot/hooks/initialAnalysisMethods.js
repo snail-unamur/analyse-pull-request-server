@@ -17,7 +17,7 @@ const initialAnalysisMethods = () => {
         }
 
         if(createdFile.current_code_churn >= churnThreshold){
-          pullRequest.analysis.highly_churn_file_result.count += 1;
+          pullRequest.analysis.highly_churn_file.count += 1;
         }
 
         // Add the file to the pull request analysis
@@ -52,7 +52,7 @@ const initialAnalysisMethods = () => {
       }
     }
 
-      let metric_value = (pullRequest.analysis.highly_churn_file_result.count / pullRequest.files.length);
+      let metric_value = (pullRequest.analysis.highly_churn_file.count / pullRequest.files.length);
       
       // Prs that contains revert commit shows there is no file difference which leads to 0 file in changeset 
       // When they processed, metric_value is NaN. So we set the metric_value to 0 to prevent this case
@@ -61,7 +61,7 @@ const initialAnalysisMethods = () => {
         metric_value = 0;
       }
 
-      pullRequest.analysis.highly_churn_file_result.value = metric_value;
+      pullRequest.analysis.highly_churn_file.value = metric_value;
     }
   };
 
@@ -87,7 +87,7 @@ const initialAnalysisMethods = () => {
           };
 
           if(createdFile.current_bug_frequency >= bugFreqThreshold){
-            pullRequest.analysis.highly_buggy_file_result.count += 1;
+            pullRequest.analysis.highly_buggy_file.count += 1;
           }
 
           // Add the file to the pull request analysis
@@ -113,7 +113,7 @@ const initialAnalysisMethods = () => {
         }
       }
 
-      let metric_value = pullRequest.analysis.highly_buggy_file_result.count / pullRequest.files.length;
+      let metric_value = pullRequest.analysis.highly_buggy_file.count / pullRequest.files.length;
       
       // Prs that contains revert commit shows there is no file difference which leads to 0 file in changeset 
       // When they processed, metric_value is NaN. So we set the metric_value to 0 to prevent this case
@@ -121,7 +121,7 @@ const initialAnalysisMethods = () => {
         metric_value = 0;
       }
 
-      pullRequest.analysis.highly_buggy_file_result.value = metric_value;
+      pullRequest.analysis.highly_buggy_file.value = metric_value;
     }
   };
 
