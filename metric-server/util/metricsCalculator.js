@@ -54,6 +54,7 @@ const filterEnabledMetrics = (metrics, analysis) => {
         const analysisMetric = analysis[metric.id];
 
         return {
+            name: metric.name,
             coefficient: metric.coefficient,
             value: analysisMetric.value,
         }
