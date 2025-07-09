@@ -1,9 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import pullRequestRoutes from './routes/pullRequestRoutes.js';
+import metricsRoutes from './routes/metricsRoutes.js';
+import settingsRoutes from './routes/settingsRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import connectToDB from './config/databaseConfig.js';
-import passport from 'passport';
 import cookieSession from 'cookie-session';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -26,10 +26,9 @@ app.use(
 		keys: [process.env.COOKIE_KEY],
 	})
 );
-app.use(passport.initialize());
-app.use(passport.session());
 
-app.use('/api/:repoOwner/:repoName/pullRequest', pullRequestRoutes);
+app.use('/api/:repoOwner/:repoName/settings', settingsRoutes);
+app.use('/api/:repoOwner/:repoName/pullRequest', metricsRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

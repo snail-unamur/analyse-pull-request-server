@@ -5,9 +5,11 @@ const calculateMetrics = (prNumber, settings, analysis) => {
 
     return {
         prNumber: prNumber,
-        riskValue: riskValue,
-        riskCategory: riskCategory,
-        metrics: enabledMetrics,
+        analysis: {
+            riskValue: riskValue,
+            riskCategory: riskCategory,
+            metrics: enabledMetrics,
+        }
     }
 }
 

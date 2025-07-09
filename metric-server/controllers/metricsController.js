@@ -6,6 +6,7 @@ import calculateMetrics from '../util/metricsCalculator.js';
  * @desc    Fetch metrics for all pull requests in a repository
  * @route   GET /api/:repoOwner/:repoName/pullRequest
  * @query   prNumbers (comma-separated list of PR numbers)
+ * @access  Public
  */
 const getMetricsForPullRequests = asyncHandler(async (req, res) => {
 	const { repoOwner, repoName } = req.params;
@@ -45,4 +46,4 @@ const getMetricsForPullRequest = asyncHandler(async (req, res) => {
 	}
 });
 
-export { getMetricsForPullRequest as getPullRequest, getMetricsForPullRequests as getPullRequests };
+export { getMetricsForPullRequest, getMetricsForPullRequests };

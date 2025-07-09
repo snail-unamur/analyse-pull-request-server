@@ -1,4 +1,4 @@
-const retrieveAccessToken = (headers) => {
+const retrieveAccessToken = (res,headers) => {
     const authHeader = headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
