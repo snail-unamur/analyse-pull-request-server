@@ -27,6 +27,28 @@ const settingsSchema = new Schema({
       file_threshold: { type: Number, default: 50 },
     },
   },
+  risk_value: {
+    a: {
+      lower_bound: { type: Number, default: 0 },
+      upper_bound: { type: Number, default: 20 },
+    },
+    b: {
+      lower_bound: { type: Number, default: 20 },
+      upper_bound: { type: Number, default: 40 },
+    },
+    c: {
+      lower_bound: { type: Number, default: 40 },
+      upper_bound: { type: Number, default: 60 },
+    },
+    d: {
+      lower_bound: { type: Number, default: 60 },
+      upper_bound: { type: Number, default: 80 },
+    },
+    e: {
+      lower_bound: { type: Number, default: 80 },
+      upper_bound: { type: Number, default: 100 },
+    },
+  }
 });
 
 const fileSchema = new Schema({
