@@ -2,11 +2,9 @@ const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGO_URI);
 
 const Repository = require("./models/Repository.js");
-const User = require("./models/User.js");
 const incrementalHelpers = require("./hooks/incrementalHelpers.js");
 const incrementalAnalysisMethods = require("./hooks/incrementalAnalysisMethods.js");
 const initial = require("./hooks/initial.js");
-const axios = require("axios");
 
 module.exports = (app) => {
   app.log.info("The app was loaded");
@@ -562,35 +560,5 @@ const addUpdatePullRequest = async (repoID, destinationBranchName, pullRequest, 
     } catch (error) {
       console.error(error);
     }
-  }
-}
-
-async function increaseAuthorTotalPullRequest(repoID, pullRequest, destinationBranchName) {
-  try {
-    const result = await Repository.findOneAndUpdate(
-      { repo_id: repoID },
-      {
-        $inc: {
-          "collaborators.$[collaborator].total_pull_request_count": 1,
-          "collaborators.$[collaborator].total_risk_score": pullRequest.analysis.risk_score.score
-        }
-      },
-      { arrayFilters: [{ "collaborator.login": pullRequest.author.login }], new: true }
-    );
-
-    const updatedRiskScore = result.collaborators.find(collaborator => collaborator.login == pullRequest.author.login).total_risk_score;
-
-    const result2 = await Repository.findOneAndUpdate(
-      { repo_id: repoID },
-      { $set: { "analyzed_branches.$[branch].pullRequests.$[pullRequest].author.cur_total_risk_score": updatedRiskScore } },
-      { new: true, arrayFilters: [{ "branch.branch_name": destinationBranchName }, { "pullRequest.id": pullRequest.id }] }
-    );
-
-    console.log(`The total risk score of ${pullRequest.author} is updated in collaborators`);
-
-    // Create and save the impact graph png
-    // impactGraphUrl = await incremental_generate_save_impact_graph(repoID, context.payload.pull_request.number);
-  } catch (error) {
-    console.error(error);
   }
 }

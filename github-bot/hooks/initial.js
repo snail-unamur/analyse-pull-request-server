@@ -2,15 +2,12 @@ const initialHelpers = require("./initialHelpers.js");
 const initialAnalysisMethods = require("./initialAnalysisMethods.js");
 
 const Repository = require("../models/Repository.js");
-const User = require("../models/User.js");
-
-const axios = require("axios");
 
 const initial = async (octokit, graphqlWithAuth, username, repo) => {
 
   // Import hooks
   const {getDefaultBranch, getOverview, getDefaultBranchFiles, getPullRequestsDetails} = initialHelpers(octokit, graphqlWithAuth);
-  const {initial_calculateCodeChurn, initial_calculateBugFrequencies, initial_calculateCoChangeFiles, initial_calculateRiskScore} = initialAnalysisMethods();
+  const {initial_calculateCodeChurn, initial_calculateBugFrequencies, initial_calculateCoChangeFiles} = initialAnalysisMethods();
 
   /////////////////////////////
   // General Repository Info //
@@ -31,55 +28,6 @@ const initial = async (octokit, graphqlWithAuth, username, repo) => {
   repository.analyzed_branches.push({
     branch_name: default_branch,
   })
-
-  ////////////////////////
-  // Callgraph Creation //
-  ////////////////////////
-
-  // const { user_gh_access_token: githubToken } = await User.findOne({ user_login: repoInfo['owner']['login'] });
-
-  // const { data: srcPath } = await axios.post(`http://localhost:8080/api/v1/callgraph/create-save`, {
-  //  projectIdentifier: repoInfo["full_name"],
-  //  branchName: repoInfo["default_branch"],
-  //  githubToken,
-  // })
-
-  // repository.source_code_location_path = srcPath;
-
-  ///////////////////
-  // Collaborators //
-  ///////////////////
-
-  // This section is commented out because we use a fork project for testing purposes
-  // Since we need to need to have ownership of a project to be able to add our bot, we fork these open source projects
-
-  /*
-  const collaboratorsInfo = await getCollaborators(username, repo);
-  
-  for(const collaboratorInfo of collaboratorsInfo) {
-    const check = await User.findOne({user_github_id: collaboratorInfo["collaborator_id"]})
-    let user_role = ""
-    if(repoInfo["owner"]["id"] == collaboratorInfo["collaborator_id"]){
-      user_role = "owner"
-    } else {
-      user_role = "collaborator"
-    }
-
-    if(!check) {
-      const collaborator = new User({
-        user_github_id: collaboratorInfo["collaborator_id"],
-        user_name: collaboratorInfo["collaborator_name"],
-        user_login: collaboratorInfo["collaborator_login"],
-        user_repo_ids: [repository.repo_id],
-      })
-      await collaborator.save()
-      repository.collaborators.push({ name: collaborator.user_name, id: collaborator.user_github_id, login: collaborator.user_login, role: user_role, total_pull_request_count: 0, total_merged_pull_request_count: 0, total_risk_score: 0 })
-    } else {
-      repository.collaborators.push({ name: check.user_name, id: check.user_github_id, login: check.user_login, role: user_role, total_pull_request_count: 0, total_merged_pull_request_count: 0, total_risk_score: 0 })
-    }
-  }
-  console.log("Collaborators calculated");
-  */
 
   //////////////
   // Overview //
@@ -116,9 +64,6 @@ const initial = async (octokit, graphqlWithAuth, username, repo) => {
   initial_calculateCoChangeFiles(repository)
   console.log("Co-Change Files calculated")
 
-  initial_calculateRiskScore(repository)
-  console.log("Risk Score calculated")
-
   try {
     await Repository.findOneAndUpdate(
       {repo_id: repository.repo_id}, 
@@ -127,12 +72,10 @@ const initial = async (octokit, graphqlWithAuth, username, repo) => {
         repo_name: repository.repo_name,
         repo_owner: repository.repo_owner,
         repo_url: repository.repo_url,
-        collaborators: repository.collaborators,
         overview: repository.overview,
         analyzed_branches: repository.analyzed_branches,
         settings: repository.settings,
         is_initial_analyze_finished: true,
-        source_code_location_path: repository.source_code_location_path,
         }
       },
       {new: true, upsert: true}

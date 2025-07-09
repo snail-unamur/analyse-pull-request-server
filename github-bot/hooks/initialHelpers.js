@@ -1,7 +1,6 @@
 const RepositoryQuery = require("./queries.js");
 const fetch = require("node-fetch");
 
-const Repository = require("../models/Repository.js");
 const TOKEN = "<some_github_token>";
 
 // Get all the pull requests
@@ -40,7 +39,7 @@ const initialHelpers = (octokit, graphqlWithAuth) => {
   const getTotalLOC = async (owner, repo, path, branch_sha) => {
     const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch_sha}`, {
       headers: {
-        'Authorization': `Token ${TOKEN}`
+        'Authorization': `Bearer ${TOKEN}`
       }
     })
     const data = await response.json()
@@ -68,28 +67,6 @@ const initialHelpers = (octokit, graphqlWithAuth) => {
       return "";
     }
 	};
-
-  const getCollaborators = async (username, repo) => {
-    let collaborators = []
-
-    const {data: collaboratorsInfo} = await octokit.rest.repos.listCollaborators({
-      owner: username,
-      repo: repo,
-    });
-
-    for (const collaborator of collaboratorsInfo) {
-      const {data: collaboratorInfo} = await octokit.rest.users.getByUsername({
-        username: collaborator["login"]
-      });
-      
-      let name = collaboratorInfo["login"] // Some GitHub accounts do not have display name, in that case we use their login name
-      if (collaboratorInfo["name"]) {
-        name = collaboratorInfo["name"]
-      }
-      collaborators.push({collaborator_name: name, collaborator_login: collaboratorInfo["login"], collaborator_id: collaboratorInfo["id"]})
-    }
-    return collaborators;
-  }
 
   const getOverview = async (username, repo) => {
     let language_ratios = []
@@ -123,8 +100,6 @@ const initialHelpers = (octokit, graphqlWithAuth) => {
   }
 
   const getPullRequestsDetails = async (owner, repository, baseBranch) => {
-    const sizeCategories = repository.settings.metric_management.pr_size;
-    const authorMergeRateCategories = repository.settings.metric_management.author_merge_rate;
     const repo = repository["repo_name"]
     let everyPullRequests = await octokit.paginate(
       "GET /repos/:owner/:repo/pulls",
@@ -151,68 +126,27 @@ const initialHelpers = (octokit, graphqlWithAuth) => {
         name: pullRequest.user.name,
         login: pullRequest.user.login,
         id: pullRequest.user.id,
-        cur_total_risk_score: 0,
-        cur_pull_request_count: 0,
-        cur_merged_pull_request_count: 0,
       }
       
       pullRequest.author = author;
 
       pullRequest.analysis = {
         likert_scale: {},
-        quality_gate: {},
-        risk_score: {},
         current_bug_frequencies: [],
         current_code_churns: [],
         current_co_changes: [],
         highly_buggy_file_result: {
           count: 0,
-          category: 0,
+          value: 0,
         },
         highly_churn_file_result: {
           count: 0,
-          category: 0,
+          value: 0,
         },
-        pr_size_result: {},
-        author_merge_rate_result: {},        
-        current_page_rank_result: {},
+        pr_size_result: {
+          value: 0,
+        },
       }
-
-      // Update collaborator and author total information
-      let collaborator = repository.collaborators.find(collaborator => collaborator.login === pullRequest.author.login);
-      
-      //This check is added to determine whether the collaborator should be pushed to the repository collaborators array after below changes done
-      let ifCollaboratorExist = true 
-
-      if(!collaborator){
-        ifCollaboratorExist = false
-        collaborator = {
-          name: pullRequest.author.name,
-          id: pullRequest.author.id,
-          login: pullRequest.author.login,
-          role: "contributor",
-          is_active: false,
-          total_risk_score: 0,
-          total_pull_request_count: 0,
-          total_merged_pull_request_count: 0,
-        }
-      }
-
-      collaborator.total_pull_request_count += 1;
-
-      if(pullRequest.state == "merged"){
-        collaborator.total_merged_pull_request_count += 1;
-      }
-
-      if(!ifCollaboratorExist){
-        repository.collaborators.push(collaborator);
-      }
-
-      pullRequest.author.cur_pull_request_count = collaborator.total_pull_request_count;
-      pullRequest.author.cur_merged_pull_request_count = collaborator.total_merged_pull_request_count;
-      
-      const authorMergeRate = pullRequest.author.cur_merged_pull_request_count / pullRequest.author.cur_pull_request_count;
-      pullRequest.analysis.author_merge_rate_result.category = calculateMetricCategory(authorMergeRate, authorMergeRateCategories, false);
 
       if(pullRequest.state == "merged"){
         mergedPullRequests.push(pullRequest)
@@ -281,8 +215,8 @@ const initialHelpers = (octokit, graphqlWithAuth) => {
               const size = pullRequest.additions + pullRequest.deletions;
 
               // Update pull request pr size analysis //
-              pullRequest.analysis.pr_size_result.category = calculateMetricCategory(size, sizeCategories, true);
-
+              pullRequest.analysis.pr_size_result.value = size;
+              
               pullRequest.changes = pullRequestGraphQLInfo.changes;
               pullRequest.mergedBy = pullRequestGraphQLInfo.mergedBy;
               pullRequest.reviews = pullRequestGraphQLInfo.reviews.edges.map(({ node }) => ({ name: node.author.name, login:node.login, id: node.author.id }));
@@ -290,9 +224,6 @@ const initialHelpers = (octokit, graphqlWithAuth) => {
 
               if(pullRequestGraphQLInfo.author){
                 pullRequest.author.name = pullRequestGraphQLInfo.author.name;
-                // COLLABORATOR PART => Open this code if you own the repository
-                // const collaborator = repository.collaborators.find(collaborator => collaborator.login === pullRequest.author.login);
-                // collaborator.name = pullRequest.author.name;
               }
               allPullRequests.push(pullRequest)
             }
@@ -376,33 +307,7 @@ const initialHelpers = (octokit, graphqlWithAuth) => {
     await new Promise(resolve => setTimeout(resolve, sleepTime + 1000)); // add 1 second to make sure the rate limit has been reset
   }
 
-  const calculateMetricCategory = (metric_value, metricSettings, shouldBeDivideByHundred) => {
-    let category;
-
-    if(shouldBeDivideByHundred){
-      metric_value = metric_value / 100;
-    }
-
-    if (metricSettings.e.lower_bound / 100 <= metric_value && metric_value <= metricSettings.e.upper_bound / 100) {
-      category = 4;
-    }
-    else if (metricSettings.d.lower_bound / 100 < metric_value && metric_value <= metricSettings.d.upper_bound / 100) {
-      category = 3;
-    }
-    else if (metricSettings.c.lower_bound / 100 < metric_value && metric_value <= metricSettings.c.upper_bound / 100) {
-      category = 2;
-    }
-    else if (metricSettings.b.lower_bound / 100 < metric_value && metric_value <= metricSettings.b.upper_bound / 100) {
-      category = 1;
-    }
-    else if (metricSettings.a.lower_bound / 100 <= metric_value && metric_value <= metricSettings.a.upper_bound / 100) {
-      category = 0;
-    }
-
-    return category
-  }
-
-  return {getDefaultBranch, getCollaborators, getOverview, getDefaultBranchFiles, getPullRequestsDetails, calculateMetricCategory};
+  return {getDefaultBranch, getOverview, getDefaultBranchFiles, getPullRequestsDetails};
 }
 
 module.exports = initialHelpers;

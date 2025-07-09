@@ -1,13 +1,8 @@
-const initialHelpers = require("./initialHelpers.js");
-
 const initialAnalysisMethods = () => {
-  const {calculateMetricCategory} = initialHelpers();
-
   const initial_calculateCodeChurn = (repository) => {
     const pullRequests = repository.analyzed_branches[0].pullRequests;
     let branchFiles = repository.analyzed_branches[0].files;
     const churnThreshold = repository.settings.metric_management.highly_churn_file.file_threshold;
-    const churnCategories = repository.settings.metric_management.highly_churn_file;
     
     for (const pullRequest of pullRequests) {
       
@@ -66,9 +61,7 @@ const initialAnalysisMethods = () => {
         metric_value = 0;
       }
 
-      // Calculate category of bug frequency
-      pullRequest.analysis.highly_churn_file_result.category = calculateMetricCategory(metric_value, churnCategories, false);
-
+      pullRequest.analysis.highly_churn_file_result.value = metric_value;
     }
   };
 
@@ -76,7 +69,6 @@ const initialAnalysisMethods = () => {
     const pullRequests = repository.analyzed_branches[0].pullRequests;
     let branchFiles = repository.analyzed_branches[0].files;
     const bugFreqThreshold = repository.settings.metric_management.highly_buggy_file.file_threshold;
-    const bugFrequencyCategories = repository.settings.metric_management.highly_buggy_file;
     let bugFlag;
 
     for (const pullRequest of pullRequests) {
@@ -129,8 +121,7 @@ const initialAnalysisMethods = () => {
         metric_value = 0;
       }
 
-      // Calculate category of bug frequency
-      pullRequest.analysis.highly_buggy_file_result.category = calculateMetricCategory(metric_value, bugFrequencyCategories, false);
+      pullRequest.analysis.highly_buggy_file_result.value = metric_value;
     }
   };
 
@@ -193,67 +184,7 @@ const initialAnalysisMethods = () => {
     }
   }
 
-  const initial_calculateRiskScore = (repository) => {
-    const pullRequests = repository.analyzed_branches[0].pullRequests;
-    const riskScoreSettings = repository.settings.metric_management.risk_score;
-    let collaborators = repository.collaborators;
-
-    const qualityGateMetrics = repository.settings.quality_gate;
-    const qualityGate = {}
-
-    for (const metric of qualityGateMetrics) {
-      qualityGate[metric.metric_name] = metric.threshold;
-    }
-
-    for (const pullRequest of pullRequests) {
-      // Risk score formulation
-      const risk_value = parseFloat((( 3.4 * pullRequest.analysis.highly_buggy_file_result.category +
-                            2.9 * pullRequest.analysis.pr_size_result.category +
-                            2.1 * pullRequest.analysis.highly_churn_file_result.category +
-                            1.6 * pullRequest.analysis.author_merge_rate_result.category) * 2.5).toFixed(2));
-
-      pullRequest.analysis.risk_score.score = risk_value;
-      const collaborator = collaborators.find(collaborator => collaborator.login === pullRequest.author.login)
-      collaborator.total_risk_score += risk_value;
-      pullRequest.author.cur_total_risk_score = collaborator.total_risk_score;
-
-      // Calculate category of risk score
-      pullRequest.analysis.risk_score.category = calculateMetricCategory(risk_value, riskScoreSettings, true)
-      
-      // Add risk score of pull request to the author's total risk score
-      if (collaborator) {
-        collaborator.total_avg_risk_score += risk_value;
-        pullRequest.author.cur_avg_risk_score += collaborator.total_avg_risk_score;
-      }
-
-      // Calculate quality gate status
-      pullRequest.analysis.quality_gate.status = true;
-      pullRequest.analysis.quality_gate.fail_reasons = [];
-
-      if (qualityGate.hasOwnProperty("risk_score") && pullRequest.analysis.risk_score.score >= qualityGate.risk_score) {
-        pullRequest.analysis.quality_gate.status = false;
-        pullRequest.analysis.quality_gate.fail_reasons.push(`Risk score should be lower than ${qualityGate['risk_score']}`)
-      }
-  
-      if (qualityGate.hasOwnProperty("highly_buggy_file") && pullRequest.analysis.highly_buggy_file_result.count != undefined &&
-        (pullRequest.analysis.highly_buggy_file_result.count / pullRequest.files.length) * 100 >= qualityGate.highly_buggy_file) {
-        pullRequest.analysis.quality_gate.status = false;
-        pullRequest.analysis.quality_gate.fail_reasons.push(`Highly buggy file ratio should be lower than ${qualityGate['highly_buggy_file']}%`)
-      }
-  
-      if (qualityGate.hasOwnProperty("highly_churn_file") && (pullRequest.analysis.highly_churn_file_result.count / pullRequest.files.length) * 100 >= qualityGate.highly_churn_file) {
-        pullRequest.analysis.quality_gate.status = false;
-        pullRequest.analysis.quality_gate.fail_reasons.push(`Highly churn file ratio should be lower than ${qualityGate['highly_churn_file']}%`)
-      }
-  
-      if (qualityGate.hasOwnProperty("pr_size") && (pullRequest.lines.additions + pullRequest.lines.deletions) >= qualityGate.pr_size) {
-        pullRequest.analysis.quality_gate.status = false;
-        pullRequest.analysis.quality_gate.fail_reasons.push(`Pull request size should be lower than ${qualityGate['pr_size']}`)
-      }
-    }
-  };
-
-  return {initial_calculateCodeChurn, initial_calculateBugFrequencies, initial_calculateCoChangeFiles, initial_calculateRiskScore}
+  return {initial_calculateCodeChurn, initial_calculateBugFrequencies, initial_calculateCoChangeFiles}
 };
 
 module.exports = initialAnalysisMethods;
