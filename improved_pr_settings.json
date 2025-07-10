@@ -1,0 +1,59 @@
+{
+    "analysis_metrics": [
+        {
+            "id": "highly_churn_file",
+            "name": "Code Churn",
+            "checked": true,
+            "coefficient": 1.5,
+            "_id": "686e4e8a5a2db1ec9f640974"
+        },
+        {
+            "id": "highly_buggy_file",
+            "name": "Previous Bug Frequency",
+            "checked": true,
+            "coefficient": 1.5,
+            "_id": "686e4e8a5a2db1ec9f640975"
+        },
+        {
+            "id": "pr_size",
+            "name": "Co-changed Files",
+            "checked": true,
+            "coefficient": 0.5,
+            "_id": "686e4e8a5a2db1ec9f640976"
+        }
+    ],
+    "metric_management": {
+        "highly_churn_file": {
+            "file_threshold": 5
+        },
+        "highly_buggy_file": {
+            "file_threshold": 0.4
+        },
+        "highly_co_change_file": {
+            "file_threshold": 50
+        }
+    },
+    "risk_value": {
+        "a": {
+            "lower_bound": 0,
+            "upper_bound": 20
+        },
+        "b": {
+            "lower_bound": 20,
+            "upper_bound": 40
+        },
+        "c": {
+            "lower_bound": 40,
+            "upper_bound": 60
+        },
+        "d": {
+            "lower_bound": 60,
+            "upper_bound": 80
+        },
+        "e": {
+            "lower_bound": 80,
+            "upper_bound": 100
+        }
+    },
+    "_id": "686e4e8a5a2db1ec9f640973"
+}

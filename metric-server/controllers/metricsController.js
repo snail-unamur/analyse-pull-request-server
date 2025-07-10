@@ -1,6 +1,8 @@
 import asyncHandler from 'express-async-handler';
 import Repository from '../models/Repository.js';
-import calculateMetrics from '../util/metricsCalculator.js';
+import calculateMetrics from '../utils/metricsCalculator.js';
+import retreiveSonarQubeMetrics from '../utils/sonarQubeMetrics.js';
+import retreiveRobotMetrics from '../utils/robotMetrics.js';
 
 /*
  * @desc    Fetch metrics for all pull requests in a repository
@@ -37,7 +39,14 @@ const getMetricsForPullRequest = asyncHandler(async (req, res) => {
 	const pullRequest = repo.analyzed_branches[0].pullRequests.find(pullRequest => pullRequest.number === castPrNumber);
 
 	if (pullRequest) {
-		const result = calculateMetrics(pullRequest.number, repo.settings, pullRequest.analysis);
+		const settings = repo.settings.analysis_metrics;
+		const riskValueTresholds = repo.settings.risk_value;
+
+		const sonarqubeMetrics = await retreiveSonarQubeMetrics(settings);
+		const robotMetrics = retreiveRobotMetrics(settings, pullRequest.analysis);
+		const allMetrics = [...sonarqubeMetrics, ...robotMetrics];
+
+		const result = calculateMetrics(pullRequest.number, allMetrics, riskValueTresholds);
 
 		res.json(result);
 	} else {

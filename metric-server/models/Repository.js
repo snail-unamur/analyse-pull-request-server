@@ -8,13 +8,21 @@ const settingsSchema = new Schema({
 				id: String,
 				name: String,
 				checked: Boolean,
+				source: String,
 				coefficient: Number,
 			},
 		],
 		default: [
-			{ id: 'highly_churn_file', name: 'Code Churn', checked: true, coefficient: 1.5 },
-			{ id: 'highly_buggy_file', name: 'Previous Bug Frequency', checked: true, coefficient: 1.5 },
-			{ id: 'pr_size', name: 'Co-changed Files', checked: true, coefficient: 1.5 },
+			{ id: 'highly_churn_file', name: 'Code Churn', checked: true, coefficient: 1.5, source: 'robot' },
+			{ id: 'highly_buggy_file', name: 'Previous Bug Frequency', checked: true, coefficient: 1.5, source: 'robot' },
+			{ id: 'co_changed', name: 'Co-changed Files', checked: true, coefficient: 1.5, source: 'robot' },
+			{ id: 'complexity', name: 'Cyclomatic Complexity', checked: true, coefficient: 1.5, source: 'sonarqube' },
+			{ id: 'cognitive_complexity', name: 'Cognitive Complexity', checked: true, coefficient: 1.5, source: 'sonarqube' },
+			{ id: 'duplicated_lines_density', name: 'Duplicated Lines Density', checked: true, coefficient: 1.5, source: 'sonarqube' },
+			{ id: 'ncloc', name: 'Lines of Code', checked: true, coefficient: 1.5, source: 'sonarqube' },
+			{ id: 'code_smells', name: 'Code Smells', checked: true, coefficient: 1.5, source: 'sonarqube' },
+			{ id: 'bugs', name: 'Bugs', checked: true, coefficient: 1.5, source: 'sonarqube' },
+			{ id: 'vulnerabilities', name: 'Vulnerabilities', checked: true, coefficient: 1.5, source: 'sonarqube' },
 		],
 	},
 	metric_management: {
@@ -103,7 +111,7 @@ const analysisSchema = new Schema({
 		value: Number,
 		count: Number,
 	},
-	pr_size: {
+	co_changed: {
 		value: Number,
 	},
 });

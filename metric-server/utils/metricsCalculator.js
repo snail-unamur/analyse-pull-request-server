@@ -1,7 +1,7 @@
-const calculateMetrics = (prNumber, settings, analysis) => {
-    const enabledMetrics = filterEnabledMetrics(settings.analysis_metrics, analysis);
+const calculateMetrics = (prNumber, metrics, riskValueTresholds) => {
+    const enabledMetrics = metrics.filter(metric => metric.checked);
     const riskValue = calculateRiskValue(enabledMetrics);
-    const riskCategory = calculateMetricCategory(riskValue, settings.risk_value);
+    const riskCategory = calculateMetricCategory(riskValue, riskValueTresholds);
 
     return {
         prNumber: prNumber,
@@ -28,7 +28,7 @@ const calculateRiskValue = (enabledMetrics) => {
 const calculateMetricCategory = (value, metricLevel) => {
     let category;
 
-    value = value / 100;
+    value = value / 1000;
 
     if (metricLevel.e.lower_bound / 100 <= value && value <= metricLevel.e.upper_bound / 100) {
         category = 'E';
@@ -47,18 +47,6 @@ const calculateMetricCategory = (value, metricLevel) => {
     }
 
     return category
-}
-
-const filterEnabledMetrics = (metrics, analysis) => {
-    return metrics.filter(metric => metric.checked).map(metric => {
-        const analysisMetric = analysis[metric.id];
-
-        return {
-            name: metric.name,
-            coefficient: metric.coefficient,
-            value: analysisMetric.value,
-        }
-    });
 }
 
 export default calculateMetrics;

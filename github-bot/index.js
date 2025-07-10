@@ -10,7 +10,7 @@ module.exports = (app) => {
   app.log.info("The app was loaded");
 
   const { createPullRequestItem, getBranchFiles, getSpesificPullRequest, getAllActivePullRequests, getSettings, divideSettings, getOverview } = incrementalHelpers();
-  const { incremental_calculateCurrentCodeChurn, incremental_calculateCurrentBugFrequencies, incremental_calculateCurrentCoChangeFiles, incremental_updateBranch, incremental_calculateRiskScore, incremental_calculateMergeRate } = incrementalAnalysisMethods();
+  const { incremental_calculateCurrentCodeChurn, incremental_calculateCurrentBugFrequencies, incremental_calculateCurrentCoChangeFiles, incremental_updateBranch } = incrementalAnalysisMethods();
 
   ////////////////////////////////
   // Installation Created Event //
