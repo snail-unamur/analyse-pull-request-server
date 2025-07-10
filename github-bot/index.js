@@ -66,21 +66,17 @@ module.exports = (app) => {
     const repoID = context.payload.repository.id;
     const default_branch = context.payload.repository.default_branch;
     const destinationBranchName = context.payload.pull_request.base.ref;
-    const projectIdentifier = context.payload.repository.full_name;
 
     if (destinationBranchName == default_branch) {
-
       const settings = await getSettings(repoID);
-      const { churnSettings, bugFreqSettings, coChangeSettings, riskSettings, sizeSettings, mergeRateSettings, pageRankSettings, qualityGateMetrics } = divideSettings(settings);
-      const pullRequest = await createPullRequestItem(context, sizeSettings, mergeRateSettings);
+      const { churnSettings, bugFreqSettings, coChangeSettings } = divideSettings(settings);
+      const pullRequest = await createPullRequestItem(context);
       const branchFiles = await getBranchFiles(repoID, destinationBranchName);
 
       // Calculate our metrics depending on the new status of the repository
       incremental_calculateCurrentCodeChurn(pullRequest, branchFiles, churnSettings)
       incremental_calculateCurrentBugFrequencies(pullRequest, branchFiles, bugFreqSettings)
       incremental_calculateCurrentCoChangeFiles(pullRequest, branchFiles, coChangeSettings)
-      await incremental_calculate_pagerank(pullRequest, projectIdentifier, pageRankSettings)
-      incremental_calculateRiskScore(pullRequest, riskSettings, qualityGateMetrics)
 
       // This check is added for pull request which is close when initial analysis is done and reopened while in incremental analysis
       // Since we do not add closed pull requests in the database with initial analysis, it is necessary to check here
@@ -104,71 +100,8 @@ module.exports = (app) => {
           console.error(error);
         }
       }
-      // Create and save the impact graph png
-      // impactGraphUrl = await incremental_generate_save_impact_graph(repoID, context.payload.pull_request.number);
-      await addComment(context, pullRequest, settings);
     }
   })
-
-  ////////////////////////////////////
-  // Pull Request Synchronize Event //
-  ////////////////////////////////////
-
-  app.on("pull_request.synchronize", async (context) => {
-    const repoID = context.payload.repository.id;
-    const default_branch = context.payload.repository.default_branch;
-    const destinationBranchName = context.payload.pull_request.base.ref;
-    const projectIdentifier = context.payload.repository.full_name;
-
-    if (destinationBranchName == default_branch) {
-      const settings = await getSettings(repoID);
-      const { churnSettings, bugFreqSettings, coChangeSettings, riskSettings, sizeSettings, mergeRateSettings, pageRankSettings, qualityGateMetrics } = divideSettings(settings);
-
-      const pullRequest = await createPullRequestItem(context, sizeSettings, mergeRateSettings);
-      const branchFiles = await getBranchFiles(repoID, destinationBranchName);
-
-      // Calculate our metrics depending on the new status of the repository
-      incremental_calculateCurrentCodeChurn(pullRequest, branchFiles, churnSettings)
-      incremental_calculateCurrentBugFrequencies(pullRequest, branchFiles, bugFreqSettings)
-      incremental_calculateCurrentCoChangeFiles(pullRequest, branchFiles, coChangeSettings)
-
-      const oldPullRequest = await getSpesificPullRequest(repoID, destinationBranchName, pullRequest.id)
-      const oldRiskScore = oldPullRequest.analysis.risk_score.score
-
-      const newRiskScore = pullRequest.analysis.risk_score.score
-
-      const changeAmount = newRiskScore - oldRiskScore
-
-      // Update author's total risk score 
-      if (pullRequest.author.login == context.payload.sender.login) { // Check if the author is the one who pushed the changes
-        try {
-          const result = await Repository.findOneAndUpdate(
-            { repo_id: repoID },
-            { $inc: { "collaborators.$[collaborator].total_risk_score": changeAmount } },
-            { arrayFilters: [{ "collaborator.login": pullRequest.author.login }], new: true }
-          );
-
-          console.log(`The total risk score of ${pullRequest.author} is updated in collaborators`);
-          const updatedRiskScore = result.collaborators.find(collaborator => collaborator.login == pullRequest.author.login).total_risk_score
-
-          // Update author's total risk score in pullRequest
-          const result2 = await Repository.findOneAndUpdate(
-            { repo_id: repoID },
-            { $set: { "analyzed_branches.$[branch].pullRequests.$[pullRequest].author.cur_total_risk_score": updatedRiskScore } },
-            { new: true, arrayFilters: [{ "branch.branch_name": destinationBranchName }, { "pullRequest.id": pullRequest.id }] }
-          );
-          console.log(`The total risk score of ${pullRequest.author} is updated in pullRequests`);
-
-          // Create and save the impact graph png
-          // impactGraphUrl = await incremental_generate_save_impact_graph(repoID, context.payload.pull_request.number);
-        } catch (error) {
-          console.error(error);
-        }
-      }
-
-      await addUpdatePullRequest(repoID, destinationBranchName, pullRequest, mode = "update")
-    }
-  });
 
   ///////////////////////////////
   // Pull Request Closed Event //
@@ -179,7 +112,6 @@ module.exports = (app) => {
     const destinationBranchName = context.payload.pull_request.base.ref;
     const default_branch = context.payload.repository.default_branch;
     const pullRequestID = context.payload.pull_request.id;
-    const projectIdentifier = context.payload.repository.full_name;
 
     if (destinationBranchName == default_branch) {
       const pullRequest = await getSpesificPullRequest(repoID, destinationBranchName, pullRequestID)
@@ -193,11 +125,6 @@ module.exports = (app) => {
         // Update file metrics in branch
         const newBranchFiles = incremental_updateBranch(pullRequest, branchFiles);
 
-        const { source_code_location_path: srcPath } = await Repository.findOne(
-          { repo_id: repoID },
-          'source_code_location_path'
-        );
-
         const { data: prFiles } = await context.octokit.rest.pulls.listFiles({
           owner: context.payload.repository.owner.login,
           repo: context.payload.repository.name,
@@ -206,41 +133,11 @@ module.exports = (app) => {
 
         console.log(`Query ${prFiles.length} is merged.`);
 
-        const changedFilesWithPath = prFiles.map((file) => {
-          const index = file.filename.lastIndexOf('/') + 1;
-
-          return {
-            filePath: srcPath + '/' + file.filename,
-            fileName: file.filename.substring(index),
-            status: file.status.toUpperCase(),
-          };
-        });
-
-        // Update the callgraph
-        // axios.post(`http://localhost:8080/api/v1/callgraph/update`, {
-        //	projectIdentifier,
-        //	prNumber: context.payload.pull_request.number,
-        //	originBranchSha: context.payload.pull_request.head.sha,
-        //	destinationBranchSha: context.payload.pull_request.base.sha,
-        //	destinationBranchName: context.payload.pull_request.base.ref,
-        //	changedFilesWithPath,
-        // });
-
         try { // Update branch files
           const result = await Repository.findOneAndUpdate(
             { repo_id: repoID },
             { $set: { "analyzed_branches.$[branch].files": newBranchFiles } },
             { new: true, arrayFilters: [{ "branch.branch_name": destinationBranchName }] }
-          );
-        } catch (error) {
-          console.error(error);
-        }
-
-        try { // Increase author's merged pull request count in branch
-          const result = await Repository.findOneAndUpdate(
-            { repo_id: repoID },
-            { $inc: { "collaborators.$[collaborator].total_merged_pull_request_count": 1 } },
-            { arrayFilters: [{ "collaborator.login": pullRequest.author.login }], new: true }
           );
         } catch (error) {
           console.error(error);
@@ -261,7 +158,7 @@ module.exports = (app) => {
         const activePullRequests = await getAllActivePullRequests(repoID, destinationBranchName, pullRequestID);
 
         const settings = await getSettings(repoID);
-        const { churnSettings, bugFreqSettings, coChangeSettings, riskSettings, sizeSettings, mergeRateSettings, pageRankSettings, qualityGateMetrics } = divideSettings(settings);
+        const { churnSettings, bugFreqSettings, coChangeSettings } = divideSettings(settings);
 
         // Update the analyses of active pull requests 
         activePullRequests.forEach(async (activePullRequest) => {
@@ -273,13 +170,6 @@ module.exports = (app) => {
           incremental_calculateCurrentCodeChurn(activePullRequest, branchFiles, churnSettings)
           incremental_calculateCurrentBugFrequencies(activePullRequest, branchFiles, bugFreqSettings)
           incremental_calculateCurrentCoChangeFiles(activePullRequest, branchFiles, coChangeSettings)
-          await incremental_calculate_pagerank(activePullRequest, projectIdentifier, pageRankSettings)
-
-          // Normally, merge rate is calculated when a pull request is created with createPullRequestItem function
-          // However, when a pull request is merged, other active pull request should not created with createPullRequestItem function
-          // Therefore, we need to calculate merge rate of active pull requests with external function here
-          await incremental_calculateMergeRate(activePullRequest, repoID, mergeRateSettings)
-          incremental_calculateRiskScore(activePullRequest, riskSettings, qualityGateMetrics)
 
           try { // Update current active pr analysis
             const result = await Repository.findOneAndUpdate(
@@ -295,8 +185,6 @@ module.exports = (app) => {
             console.error(error);
             console.log(`The analysis of pull request number ${activePullRequest.number} could not be renewed`)
           }
-
-          // addComment(context, activePullRequest, settings, impactGraphUrl);
         });
       }
 
