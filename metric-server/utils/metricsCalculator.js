@@ -5,7 +5,7 @@ const calculateMetrics = async (settings, pullRequest) => {
     const metric = settings.analysis_metrics;
     const riskValueTresholds = settings.risk_value;
 
-    const sonarqubeMetrics = await retreiveSonarQubeMetrics(metric);
+    const sonarqubeMetrics = await retreiveSonarQubeMetrics(metric, pullRequest.number);
     const robotMetrics = retreiveRobotMetrics(metric, pullRequest.analysis);
     const allMetrics = [...sonarqubeMetrics, ...robotMetrics];
 

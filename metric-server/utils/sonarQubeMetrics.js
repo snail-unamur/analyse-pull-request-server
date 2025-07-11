@@ -1,12 +1,12 @@
-const retreiveSonarQubeMetrics = async (settings) => {
+const retreiveSonarQubeMetrics = async (settings, prNumber) => {
     const sonnarMetrics = settings.filter(metric => metric.source === 'sonarqube');
 
-    const sonarqubeToken = process.env.SONARQUBE_TOKEN;
-    const sonarqubeUrl = process.env.SONARQUBE_URL;
-    const sonarqubeProjectKey = "myJavaProject";
+    const sonarqubeToken = process.env.SONARQUBE_CLOUD_TOKEN;
+    const sonarqubeUrl = process.env.SONARQUBE_CLOUD_URL;
+    const sonarqubeProjectKey = "RasWinIste_Repo-test"; //"myJavaProject";
 
     const metricsQuery = sonnarMetrics.map(metric => metric.id).join('%2C');
-    const metricUrl = `${sonarqubeUrl}/api/measures/component?metricKeys=${metricsQuery}&component=${sonarqubeProjectKey}`;
+    const metricUrl = `${sonarqubeUrl}/api/measures/component?metricKeys=${metricsQuery}&component=${sonarqubeProjectKey}&pullRequest=${prNumber}`;
 
     const response = await fetch(metricUrl, {
         headers: {
