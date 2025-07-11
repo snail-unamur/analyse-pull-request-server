@@ -1,18 +1,3 @@
-import retreiveSonarQubeMetrics from '../utils/sonarQubeMetrics.js';
-import retreiveRobotMetrics from '../utils/robotMetrics.js';
-
-const calculateMetrics = async (settings, pullRequest) => {
-    const metric = settings.analysis_metrics;
-    const riskValueTresholds = settings.risk_value;
-
-    const sonarqubeMetrics = await retreiveSonarQubeMetrics(metric, pullRequest.number);
-    const robotMetrics = retreiveRobotMetrics(metric, pullRequest.analysis);
-    const allMetrics = [...sonarqubeMetrics, ...robotMetrics];
-
-    const result = calculateRiskMetric(pullRequest.number, allMetrics, riskValueTresholds);
-    return result;
-}
-
 const calculateRiskMetric = (prNumber, metrics, riskValueTresholds) => {
     const enabledMetrics = metrics.filter(metric => metric.checked);
     const riskValue = calculateRiskValue(enabledMetrics);
@@ -64,4 +49,4 @@ const calculateRiskCategory = (value, metricLevel) => {
     return category
 }
 
-export default calculateMetrics;
+export default calculateRiskMetric;

@@ -1,4 +1,8 @@
-export const retreiveRobotMetrics = (settings, analysis) => {
+const retreiveRobotMetrics = (settings, analysis) => {
+    if (!analysis) {
+        throw new Error('Analysis still pending.');
+    }
+
     const robotMetrics = settings.filter(metric => metric.source === 'robot');
 
     return robotMetrics.map(metric => {
