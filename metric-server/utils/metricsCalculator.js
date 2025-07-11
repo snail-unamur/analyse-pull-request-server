@@ -1,7 +1,22 @@
-const calculateMetrics = (prNumber, metrics, riskValueTresholds) => {
+import retreiveSonarQubeMetrics from '../utils/sonarQubeMetrics.js';
+import retreiveRobotMetrics from '../utils/robotMetrics.js';
+
+const calculateMetrics = async (settings, pullRequest) => {
+    const metric = settings.analysis_metrics;
+    const riskValueTresholds = settings.risk_value;
+
+    const sonarqubeMetrics = await retreiveSonarQubeMetrics(metric);
+    const robotMetrics = retreiveRobotMetrics(metric, pullRequest.analysis);
+    const allMetrics = [...sonarqubeMetrics, ...robotMetrics];
+
+    const result = calculateRiskMetric(pullRequest.number, allMetrics, riskValueTresholds);
+    return result;
+}
+
+const calculateRiskMetric = (prNumber, metrics, riskValueTresholds) => {
     const enabledMetrics = metrics.filter(metric => metric.checked);
     const riskValue = calculateRiskValue(enabledMetrics);
-    const riskCategory = calculateMetricCategory(riskValue, riskValueTresholds);
+    const riskCategory = calculateRiskCategory(riskValue, riskValueTresholds);
 
     return {
         prNumber: prNumber,
@@ -25,7 +40,7 @@ const calculateRiskValue = (enabledMetrics) => {
     return ((metricSum / coefficientSum) * 25).toFixed(2);
 }
 
-const calculateMetricCategory = (value, metricLevel) => {
+const calculateRiskCategory = (value, metricLevel) => {
     let category;
 
     value = value / 1000;
