@@ -1,5 +1,5 @@
 import JSZip from 'jszip';
-import askGitHub from '../utils/githubRepoRequest.js';
+import askGitHub from '../../api/githubRepoRequest.js';
 
 const METRIC_SOURCE = "CodeQL"
 

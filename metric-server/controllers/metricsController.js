@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Repository from '../models/Repository.js';
-import calculate from '../metrics/metricCalculator.js';
+import calculate from '../models/metrics/metricCalculator.js';
 
 /*
  * @desc    Fetch metrics for all pull requests in a repository

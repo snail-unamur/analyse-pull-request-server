@@ -1,4 +1,4 @@
-import askGitHub from "./githubRepoRequest.js";
+import askGitHub from "../api/githubRepoRequest.js";
 
 const hasAccessToGitHubRepository = async (githubHead) => {
     const request = await askGitHub(githubHead);
