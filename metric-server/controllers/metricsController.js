@@ -20,7 +20,7 @@ const getMetricsForPullRequests = asyncHandler(async (req, res) => {
 
 		try {
 			result = await Promise.all(
-				pullRequests.map(pullRequest => calculateMetrics(repo.settings, repoOwner, repoName, pullRequest))
+				pullRequests.map(pullRequest => calculateMetrics(repo.settings, repoOwner, repoName, pullRequest, req.token))
 			);
 		} catch (error) {
 			res.status(500);
@@ -50,7 +50,7 @@ const getMetricsForPullRequest = asyncHandler(async (req, res) => {
 		let result;
 		
 		try {
-			result = await calculateMetrics(repo.settings, repoOwner, repoName, pullRequest);
+			result = await calculateMetrics(repo.settings, repoOwner, repoName, pullRequest, req.token);
 		} catch (error) {
 			res.status(500);
 			throw new Error(`Error calculating metrics: ${error.message}`);

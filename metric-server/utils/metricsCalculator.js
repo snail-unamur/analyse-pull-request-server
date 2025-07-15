@@ -28,7 +28,7 @@ const calculateRiskValue = (enabledMetrics) => {
 const calculateRiskCategory = (value, metricLevel) => {
     let category;
 
-    value = value / 1000;
+    value = value / 100;
 
     if (metricLevel.e.lower_bound / 100 <= value && value <= metricLevel.e.upper_bound / 100) {
         category = 'E';

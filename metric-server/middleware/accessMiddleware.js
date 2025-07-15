@@ -11,6 +11,8 @@ const hasAccessToRepo = async (req, res, next) => {
 		if (!hasAccess) {
 			return res.status(403).send('You do not have access to this repository');
 		}
+		
+		req.token = token;
 
 		next();
 	} catch (error) {
