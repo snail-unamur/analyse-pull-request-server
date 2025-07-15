@@ -5,6 +5,9 @@ const EFFERENT_COUPLING_METRIC_ID = 'java/efferent-coupling';
 
 const retreiveCodeQLMetrics = async (githubHead, metric, pullRequest) => {
     const metrics = metric.filter(metric => metric.source === 'codeql'); // METRIC_SOURCE);
+    if (!metrics.some(m => m.checked)) {
+        return [];
+    }
 
     const artifact = await retreiveCodeQLArtifact(githubHead, pullRequest);
     const codeQLMetrics = extractMetricsFromArtifact(artifact);

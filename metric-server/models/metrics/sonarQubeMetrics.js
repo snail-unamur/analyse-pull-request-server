@@ -4,6 +4,9 @@ const METRIC_SOURCE = 'SonarQube';
 
 const retreiveSonarQubeMetrics = async (githubHead, settings, prNumber) => {
     const sonnarMetrics = settings.filter(metric => metric.source === 'sonarqube');// METRIC_SOURCE);
+    if (!sonnarMetrics.some(m => m.checked)) {
+        return [];
+    }
 
     const projectKey = `${githubHead.repoOwner}_${githubHead.repoName}`;
     const metricsQuery = sonnarMetrics.map(metric => metric.id).join('%2C');

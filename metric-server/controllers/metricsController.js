@@ -1,5 +1,5 @@
 import asyncHandler from 'express-async-handler';
-import Repository from '../models/repository.js';
+import repository from '../models/repository.js';
 import calculate from '../models/metrics/metricCalculator.js';
 
 /*
@@ -12,7 +12,7 @@ const getMetricsForPullRequests = asyncHandler(async (req, res) => {
 	const prNumbers = req.query.prNumbers ? req.query.prNumbers.split(',').map(Number) : [];
 	const githubHead = req.githubHead;
 
-	const repo = await Repository.findOne({ repo_name: githubHead.repoName, repo_owner: githubHead.repoOwner }, "analyzed_branches settings").lean();
+	const repo = await repository.findOne({ repo_name: githubHead.repoName, repo_owner: githubHead.repoOwner }, "analyzed_branches settings").lean();
 	const pullRequests = repo.analyzed_branches[0].pullRequests.filter(pullRequest => prNumbers.includes(pullRequest.number));
 
 	if (pullRequests) {
@@ -42,7 +42,7 @@ const getMetricsForPullRequest = asyncHandler(async (req, res) => {
 	const prNumber = parseInt(req.params.prNumber);
 	const githubHead = req.githubHead;
 
-	const repo = await Repository.findOne({ repo_name: githubHead.repoName, repo_owner: githubHead.repoOwner }, "analyzed_branches settings").lean();
+	const repo = await repository.findOne({ repo_name: githubHead.repoName, repo_owner: githubHead.repoOwner }, "analyzed_branches settings").lean();
 	const pullRequest = repo.analyzed_branches[0].pullRequests.find(pullRequest => pullRequest.number === prNumber);
 
 	if (pullRequest) {

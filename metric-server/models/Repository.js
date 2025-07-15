@@ -172,5 +172,5 @@ const repoSchema = new Schema({
 	analyzed_branches: [analyzedBranchSchema],
 });
 
-const Repository = model("Repository", repoSchema);
-export default Repository;
+const repository = model("repository", repoSchema);
+export default repository;
