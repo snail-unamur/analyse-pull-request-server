@@ -1,14 +1,15 @@
 import JSZip from 'jszip';
+import askGitHub from '../utils/githubRepoRequest.js';
 
-const baseUrl = 'https://api.github.com/repos';
+const METRIC_SOURCE = "CodeQL"
 
-const retreiveCodeQLMetrics = async (metric, repoOwner, repoName, pullRequest, token) => {
-    const metrics = metric.filter(metric => metric.source === 'codeql');
+const retreiveCodeQLMetrics = async (githubHead, metric, pullRequest) => {
+    const metrics = metric.filter(metric => metric.source === 'codeql'); // METRIC_SOURCE);
 
-    const runIdForPR = await retreiveRunIdForPR(repoOwner, repoName, pullRequest, token);
-    const codeQLArtefactId = await retreiveCodeQLArtefactId(repoOwner, repoName, runIdForPR, token);
-    const codeQLArtefact = await retreiveCodeQLArtefact(repoOwner, repoName, codeQLArtefactId, token);
-    const codeQLMetrics = getCodeQLMetricsFromArtefact(codeQLArtefact);
+    const runId = await retreiveRunIdForPR(githubHead, pullRequest);
+    const artefactId = await retreiveCodeQLArtefactId(githubHead, runId);
+    const artefact = await retreiveCodeQLArtefact(githubHead, artefactId);
+    const codeQLMetrics = getCodeQLMetricsFromArtefact(artefact);
     const meanInstability = calculateMeanInstabilityMetric(codeQLMetrics);
 
     metrics[0].value = meanInstability;
@@ -17,26 +18,17 @@ const retreiveCodeQLMetrics = async (metric, repoOwner, repoName, pullRequest, t
     return metrics;
 }
 
-const retreiveRunIdForPR = async (repoOwner, repoName, pullRequest, token) => {
+const retreiveRunIdForPR = async (githubHead, pullRequest) => {
     const head = pullRequest.sha;
     const number = pullRequest.number;
+    const queryUrl = `actions/runs?head_sha=${head}&event=pull_request&status=completed`;
 
-    const url = `${baseUrl}/${repoOwner}/${repoName}/actions/runs?head_sha=${head}&event=pull_request&status=completed`;
-
-    const response = await fetch(url, {
-        headers: {
-            "Accept": "application/vnd.github+json",
-            "Authorization": `Bearer ${token}`,
-
-            "X-GitHub-Api-Version": "2022-11-28"
-        }
-    });
-    if (!response.ok) {
-        throw new Error('Failed to fetch CodeQL metrics');
-    }
+    const response = await askGitHub(githubHead, queryUrl)
     const data = await response.json();
-    const runs = data.workflow_runs.filter(run => run.name === 'CodeQL' && run.pull_requests.some(pr => pr.number === number));
+
+    const runs = data.workflow_runs.filter(run => run.name === METRIC_SOURCE && run.pull_requests.some(pr => pr.number === number));
     const sortedRuns = runs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
     if (runs.length === 0) {
         throw new Error(`Analysis still pending for PR #${pullRequestNumber}.`);
     }
@@ -44,19 +36,10 @@ const retreiveRunIdForPR = async (repoOwner, repoName, pullRequest, token) => {
     return sortedRuns[0].id;
 }
 
-const retreiveCodeQLArtefactId = async (repoOwner, repoName, runId, token) => {
-    const url = `${baseUrl}/${repoOwner}/${repoName}/actions/runs/${runId}/artifacts`;
+const retreiveCodeQLArtefactId = async (githubHead, runId) => {
+    const queryUrl = `actions/runs/${runId}/artifacts`;
 
-    const response = await fetch(url, {
-        headers: {
-            "Accept": "application/vnd.github+json",
-            "Authorization": `Bearer ${token}`,
-            "X-GitHub-Api-Version": "2022-11-28"
-        }
-    });
-    if (!response.ok) {
-        throw new Error('Failed to fetch CodeQL artefacts');
-    }
+    const response = await askGitHub(githubHead, queryUrl);
     const data = await response.json();
     const artefact = data.artifacts.find(artifact => artifact.name === 'codeql-results');
 
@@ -67,20 +50,10 @@ const retreiveCodeQLArtefactId = async (repoOwner, repoName, runId, token) => {
     return artefact.id;
 }
 
-const retreiveCodeQLArtefact = async (repoOwner, repoName, artefactId, token) => {
-    const url = `${baseUrl}/${repoOwner}/${repoName}/actions/artifacts/${artefactId}/zip`;
+const retreiveCodeQLArtefact = async (githubHead, artefactId) => {
+    const queryUrl = `actions/artifacts/${artefactId}/zip`;
 
-    const response = await fetch(url, {
-        headers: {
-            "Accept": "application/vnd.github+json",
-            "Authorization": `Bearer ${token}`,
-            "X-GitHub-Api-Version": "2022-11-28"
-        }
-    });
-
-    if (!response.ok) {
-        throw new Error('Failed to fetch CodeQL artefact');
-    }
+    const response = await askGitHub(githubHead, queryUrl);
 
     const blob = await response.blob();
     const arrayBuffer = await blob.arrayBuffer();

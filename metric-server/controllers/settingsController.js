@@ -7,9 +7,9 @@ import Repository from '../models/Repository.js';
  * @access  Public
  */
 const getSettingsForRepo = asyncHandler(async (req, res) => {
-    const { repoOwner, repoName } = req.params;
+    const githubHead = req.githubHead;
 
-    const repo = await Repository.findOne({ repo_name: repoName, repo_owner: repoOwner }, "settings").lean();
+    const repo = await Repository.findOne({ repo_name: githubHead.repoName, repo_owner: githubHead.repoOwner }, "settings").lean();
 
     if (repo) {
         res.json(repo.settings);
@@ -25,11 +25,11 @@ const getSettingsForRepo = asyncHandler(async (req, res) => {
  * @access  Public
  */
 const updateSettingsForRepo = asyncHandler(async (req, res) => {
-    const { repoOwner, repoName } = req.params;
+    const githubHead = req.githubHead;
     const settings = req.body;
 
     const updatedRepo = await Repository.findOneAndUpdate(
-        { repo_name: repoName, repo_owner: repoOwner },
+        { repo_name: githubHead.repoName, repo_owner: githubHead.repoOwner },
         { settings: settings },
         { new: true, fields: "settings" }
     ).lean();

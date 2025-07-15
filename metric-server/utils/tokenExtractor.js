@@ -1,8 +1,7 @@
-const retrieveAccessToken = (res,headers) => {
+const extractAccessToken = (headers) => {
     const authHeader = headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        res.status(401);
         throw new Error('No token provided');
     }
 
@@ -10,4 +9,4 @@ const retrieveAccessToken = (res,headers) => {
     return token;
 }
 
-export default retrieveAccessToken;
+export default extractAccessToken;

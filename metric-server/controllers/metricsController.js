@@ -9,10 +9,10 @@ import calculate from '../metrics/metricCalculator.js';
  * @access  Public
  */
 const getMetricsForPullRequests = asyncHandler(async (req, res) => {
-	const { repoOwner, repoName } = req.params;
 	const prNumbers = req.query.prNumbers ? req.query.prNumbers.split(',').map(Number) : [];
+	const githubHead = req.githubHead;
 
-	const repo = await Repository.findOne({ repo_name: repoName, repo_owner: repoOwner }, "analyzed_branches settings").lean();
+	const repo = await Repository.findOne({ repo_name: githubHead.repoName, repo_owner: githubHead.repoOwner }, "analyzed_branches settings").lean();
 	const pullRequests = repo.analyzed_branches[0].pullRequests.filter(pullRequest => prNumbers.includes(pullRequest.number));
 
 	if (pullRequests) {
@@ -20,13 +20,12 @@ const getMetricsForPullRequests = asyncHandler(async (req, res) => {
 
 		try {
 			result = await Promise.all(
-				pullRequests.map(pullRequest => calculate(repo.settings, repoOwner, repoName, pullRequest, req.token))
+				pullRequests.map(pullRequest => calculate(githubHead, repo.settings, pullRequest))
 			);
 		} catch (error) {
 			res.status(500);
 			throw new Error(`Error calculating metrics: ${error.message}`);
 		}
-
 
 		res.json(result);
 	} else {
@@ -40,17 +39,17 @@ const getMetricsForPullRequests = asyncHandler(async (req, res) => {
  * @route   GET /api/:repoOwner/:repoName/pullRequest/:prNumber
  */
 const getMetricsForPullRequest = asyncHandler(async (req, res) => {
-	const { repoOwner, repoName, prNumber } = req.params;
-	const castPrNumber = parseInt(prNumber);
+	const prNumber = parseInt(req.params.prNumber);
+	const githubHead = req.githubHead;
 
-	const repo = await Repository.findOne({ repo_name: repoName, repo_owner: repoOwner }, "analyzed_branches settings").lean();
-	const pullRequest = repo.analyzed_branches[0].pullRequests.find(pullRequest => pullRequest.number === castPrNumber);
+	const repo = await Repository.findOne({ repo_name: githubHead.repoName, repo_owner: githubHead.repoOwner }, "analyzed_branches settings").lean();
+	const pullRequest = repo.analyzed_branches[0].pullRequests.find(pullRequest => pullRequest.number === prNumber);
 
 	if (pullRequest) {
 		let result;
 		
 		try {
-			result = await calculate(repo.settings, repoOwner, repoName, pullRequest, req.token);
+			result = await calculate(githubHead, repo.settings, pullRequest);
 		} catch (error) {
 			res.status(500);
 			throw new Error(`Error calculating metrics: ${error.message}`);

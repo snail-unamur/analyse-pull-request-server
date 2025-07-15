@@ -23,7 +23,7 @@ const settingsSchema = new Schema({
 			{ id: 'code_smells', name: 'Code Smells', checked: true, coefficient: 1.5, source: 'sonarqube' },
 			{ id: 'bugs', name: 'Bugs', checked: true, coefficient: 1.5, source: 'sonarqube' },
 			{ id: 'vulnerabilities', name: 'Vulnerabilities', checked: true, coefficient: 1.5, source: 'sonarqube' },
-			{ id: 'instability', name: 'Instability', checked: true, coefficient: 1.5, source: 'codeql' },
+			{ id: 'instability', name: 'Instability', checked: true, coefficient: 1.5, source: 'CodeQL' },
 		],
 	},
 	metric_management: {

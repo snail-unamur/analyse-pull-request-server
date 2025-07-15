@@ -1,9 +1,9 @@
-const retreiveSonarQubeMetrics = async (settings, repoOwner, repoName, prNumber) => {
+const retreiveSonarQubeMetrics = async (githubHead, settings, prNumber) => {
     const sonnarMetrics = settings.filter(metric => metric.source === 'sonarqube');
 
     const sonarqubeToken = process.env.SONARQUBE_CLOUD_TOKEN;
     const sonarqubeUrl = process.env.SONARQUBE_CLOUD_URL;
-    const sonarqubeProjectKey = `${repoOwner}_${repoName}`;
+    const sonarqubeProjectKey = `${githubHead.repoOwner}_${githubHead.repoName}`;
 
     const metricsQuery = sonnarMetrics.map(metric => metric.id).join('%2C');
     const metricUrl = `${sonarqubeUrl}/api/measures/component?metricKeys=${metricsQuery}&component=${sonarqubeProjectKey}&pullRequest=${prNumber}`;
