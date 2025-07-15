@@ -12,6 +12,7 @@ const retreiveCodeQLMetrics = async (metric, repoOwner, repoName, pullRequest, t
     const meanInstability = calculateMeanInstabilityMetric(codeQLMetrics);
 
     metrics[0].value = meanInstability;
+    delete metrics[0]._id;
 
     return metrics;
 }

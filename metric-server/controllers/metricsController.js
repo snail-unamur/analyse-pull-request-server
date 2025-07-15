@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Repository from '../models/Repository.js';
-import calculateMetrics from '../utils/analysis.js';
+import calculate from '../metrics/metricCalculator.js';
 
 /*
  * @desc    Fetch metrics for all pull requests in a repository
@@ -20,7 +20,7 @@ const getMetricsForPullRequests = asyncHandler(async (req, res) => {
 
 		try {
 			result = await Promise.all(
-				pullRequests.map(pullRequest => calculateMetrics(repo.settings, repoOwner, repoName, pullRequest, req.token))
+				pullRequests.map(pullRequest => calculate(repo.settings, repoOwner, repoName, pullRequest, req.token))
 			);
 		} catch (error) {
 			res.status(500);
@@ -50,7 +50,7 @@ const getMetricsForPullRequest = asyncHandler(async (req, res) => {
 		let result;
 		
 		try {
-			result = await calculateMetrics(repo.settings, repoOwner, repoName, pullRequest, req.token);
+			result = await calculate(repo.settings, repoOwner, repoName, pullRequest, req.token);
 		} catch (error) {
 			res.status(500);
 			throw new Error(`Error calculating metrics: ${error.message}`);
