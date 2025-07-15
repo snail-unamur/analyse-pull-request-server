@@ -87,21 +87,30 @@ module.exports = (app) => {
       }
       else {
         await addUpdatePullRequest(repoID, destinationBranchName, pullRequest, mode = "add")
-
-        // Increase author's total pull request count in branch
-        try {
-          const result = await Repository.findOneAndUpdate(
-            { repo_id: repoID },
-            { $inc: { "collaborators.$[collaborator].total_pull_request_count": 1 } },
-            { arrayFilters: [{ "collaborator.login": pullRequest.author.login }], new: true }
-          );
-
-        } catch (error) {
-          console.error(error);
-        }
       }
     }
   })
+
+  app.on("pull_request.synchronize", async (context) => {
+    const repoID = context.payload.repository.id;
+    const default_branch = context.payload.repository.default_branch;
+    const destinationBranchName = context.payload.pull_request.base.ref;
+
+    if (destinationBranchName == default_branch) {
+      const settings = await getSettings(repoID);
+      const { churnSettings, bugFreqSettings, coChangeSettings, sizeSettings, mergeRateSettings } = divideSettings(settings);
+
+      const pullRequest = await createPullRequestItem(context, sizeSettings, mergeRateSettings);
+      const branchFiles = await getBranchFiles(repoID, destinationBranchName);
+
+      // Calculate our metrics depending on the new status of the repository
+      incremental_calculateCurrentCodeChurn(pullRequest, branchFiles, churnSettings)
+      incremental_calculateCurrentBugFrequencies(pullRequest, branchFiles, bugFreqSettings)
+      incremental_calculateCurrentCoChangeFiles(pullRequest, branchFiles, coChangeSettings)
+
+      await addUpdatePullRequest(repoID, destinationBranchName, pullRequest, mode = "update")
+    }
+  });
 
   ///////////////////////////////
   // Pull Request Closed Event //
@@ -178,9 +187,6 @@ module.exports = (app) => {
               { new: true, arrayFilters: [{ "branch.branch_name": destinationBranchName }, { "pullRequest.id": activePullRequest.id }] }
             );
             console.log(`The analysis of pull request number ${activePullRequest.number} is renewed`);
-
-            // Create and save the impact graph png
-            // impactGraphUrl = await incremental_generate_save_impact_graph(repoID, context.payload.pull_request.number);
           } catch (error) {
             console.error(error);
             console.log(`The analysis of pull request number ${activePullRequest.number} could not be renewed`)

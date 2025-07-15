@@ -1,13 +1,15 @@
-import { retreiveSonarQubeMetrics } from '../utils/sonarQubeMetrics.js';
-import { retreiveRobotMetrics } from '../utils/robotMetrics.js';
+import retreiveSonarQubeMetrics from '../utils/sonarQubeMetrics.js';
+import retreiveRobotMetrics from '../utils/robotMetrics.js';
 import calculateRiskMetric from '../utils/metricsCalculator.js';
+import retreiveCodeQLMetrics from '../utils/codeQLMetrics.js';
 
-export const calculateMetrics = async (settings, pullRequest) => {
+export const calculateMetrics = async (settings, repoOwner, repoName, pullRequest) => {
     const metric = settings.analysis_metrics;
     const riskValueTresholds = settings.risk_value;
 
     const robotMetrics = retreiveRobotMetrics(metric, pullRequest.analysis);
-    const sonarqubeMetrics = await retreiveSonarQubeMetrics(metric, pullRequest.number);
+    const sonarqubeMetrics = await retreiveSonarQubeMetrics(metric, repoOwner, repoName, pullRequest.number);
+    //const codeQLMetrics = await retreiveCodeQLMetrics(metric, repoOwner, repoName, pullRequest.number);
     const allMetrics = [...sonarqubeMetrics, ...robotMetrics];
 
     const result = calculateRiskMetric(pullRequest.number, allMetrics, riskValueTresholds);
