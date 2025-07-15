@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
-import repository from '../models/repository.js';
-import calculate from '../models/metrics/metricCalculator.js';
+import calculate from '../models/metricCalculator.js';
+import { getOrInitRepo } from '../models/Repository.js';
 
 /*
  * @desc    Fetch metrics for all pull requests in a repository
@@ -12,15 +12,14 @@ const getMetricsForPullRequests = asyncHandler(async (req, res) => {
 	const prNumbers = req.query.prNumbers ? req.query.prNumbers.split(',').map(Number) : [];
 	const githubHead = req.githubHead;
 
-	const repo = await repository.findOne({ repo_name: githubHead.repoName, repo_owner: githubHead.repoOwner }, "analyzed_branches settings").lean();
-	const pullRequests = repo.analyzed_branches[0].pullRequests.filter(pullRequest => prNumbers.includes(pullRequest.number));
+	const repo = await getOrInitRepo(githubHead.repoOwner, githubHead.repoName);
 
-	if (pullRequests) {
+	if (repo) {
 		let result = [];
 
 		try {
 			result = await Promise.all(
-				pullRequests.map(pullRequest => calculate(githubHead, repo.settings, pullRequest))
+				prNumbers.map(number => calculate(githubHead, repo.settings, number))
 			);
 		} catch (error) {
 			res.status(500);
@@ -30,7 +29,7 @@ const getMetricsForPullRequests = asyncHandler(async (req, res) => {
 		res.json(result);
 	} else {
 		res.status(404);
-		throw new Error('Pull Requests not found');
+		throw new Error('Error while retrieving PR infos.');
 	}
 });
 
@@ -42,14 +41,13 @@ const getMetricsForPullRequest = asyncHandler(async (req, res) => {
 	const prNumber = parseInt(req.params.prNumber);
 	const githubHead = req.githubHead;
 
-	const repo = await repository.findOne({ repo_name: githubHead.repoName, repo_owner: githubHead.repoOwner }, "analyzed_branches settings").lean();
-	const pullRequest = repo.analyzed_branches[0].pullRequests.find(pullRequest => pullRequest.number === prNumber);
+	const repo = await getOrInitRepo(githubHead.repoOwner, githubHead.repoName);
 
-	if (pullRequest) {
+	if (repo) {
 		let result;
-		
+
 		try {
-			result = await calculate(githubHead, repo.settings, pullRequest);
+			result = await calculate(githubHead, repo.settings, prNumber);
 		} catch (error) {
 			res.status(500);
 			throw new Error(`Error calculating metrics: ${error.message}`);
@@ -58,9 +56,8 @@ const getMetricsForPullRequest = asyncHandler(async (req, res) => {
 		res.json(result);
 	} else {
 		res.status(404);
-		throw new Error('Pull Request not found');
+		throw new Error('Error while retrieving PR infos.');
 	}
 });
 
 export { getMetricsForPullRequest, getMetricsForPullRequests };
-

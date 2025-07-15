@@ -1,5 +1,5 @@
 import asyncHandler from 'express-async-handler';
-import repository from '../models/repository.js';
+import { getOrInitRepo, updateRepoSettings } from '../models/Repository.js';
 
 /**
  * @desc    Fetch settings for a specific repository
@@ -9,7 +9,7 @@ import repository from '../models/repository.js';
 const getSettingsForRepo = asyncHandler(async (req, res) => {
     const githubHead = req.githubHead;
 
-    const repo = await repository.findOne({ repo_name: githubHead.repoName, repo_owner: githubHead.repoOwner }, "settings").lean();
+	const repo = await getOrInitRepo(githubHead.repoOwner, githubHead.repoName);
 
     if (repo) {
         res.json(repo.settings);
@@ -28,11 +28,7 @@ const updateSettingsForRepo = asyncHandler(async (req, res) => {
     const githubHead = req.githubHead;
     const settings = req.body;
 
-    const updatedRepo = await repository.findOneAndUpdate(
-        { repo_name: githubHead.repoName, repo_owner: githubHead.repoOwner },
-        { settings: settings },
-        { new: true, fields: "settings" }
-    ).lean();
+    const updatedRepo = await updateRepoSettings(githubHead.repoOwner, githubHead.repoName, settings);
 
     if (updatedRepo) {
         res.json(updatedRepo.settings);

@@ -2,14 +2,15 @@ import retreiveCodeQLArtifact from "../../api/codeQLRequest.js";
 
 const AFFERENT_COUPLING_METRIC_ID = 'java/afferent-coupling';
 const EFFERENT_COUPLING_METRIC_ID = 'java/efferent-coupling';
+const METRIC_SOURCE = 'CodeQL';
 
-const retreiveCodeQLMetrics = async (githubHead, metric, pullRequest) => {
-    const metrics = metric.filter(metric => metric.source === 'codeql'); // METRIC_SOURCE);
+const retreiveCodeQLMetrics = async (githubHead, metric, prNumber) => {
+    const metrics = metric.filter(metric => metric.source === METRIC_SOURCE);
     if (!metrics.some(m => m.checked)) {
         return [];
     }
 
-    const artifact = await retreiveCodeQLArtifact(githubHead, pullRequest);
+    const artifact = await retreiveCodeQLArtifact(githubHead, prNumber);
     const codeQLMetrics = extractMetricsFromArtifact(artifact);
 
     const meanInstability = calculateMeanInstability(codeQLMetrics);

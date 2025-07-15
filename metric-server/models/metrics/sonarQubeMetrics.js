@@ -3,7 +3,7 @@ import askSonarQube from "../../api/sonarqubeRepoRequest.js";
 const METRIC_SOURCE = 'SonarQube';
 
 const retreiveSonarQubeMetrics = async (githubHead, settings, prNumber) => {
-    const sonnarMetrics = settings.filter(metric => metric.source === 'sonarqube');// METRIC_SOURCE);
+    const sonnarMetrics = settings.filter(metric => metric.source === METRIC_SOURCE);
     if (!sonnarMetrics.some(m => m.checked)) {
         return [];
     }
