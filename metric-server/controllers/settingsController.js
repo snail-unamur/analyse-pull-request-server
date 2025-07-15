@@ -1,5 +1,5 @@
 import asyncHandler from 'express-async-handler';
-import Repository from '../models/Repository.js';
+import Repository from '../models/repository.js';
 
 /**
  * @desc    Fetch settings for a specific repository

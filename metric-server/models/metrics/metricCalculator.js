@@ -10,9 +10,12 @@ export const calculate = async (githubHead, settings, pullRequest) => {
     const robotMetrics = retreiveRobotMetrics(metric, pullRequest.analysis);
     const sonarqubeMetrics = await retreiveSonarQubeMetrics(githubHead, metric, pullRequest.number);
     const codeQLMetrics = await retreiveCodeQLMetrics(githubHead, metric, pullRequest);
+
     const allMetrics = [...sonarqubeMetrics, ...robotMetrics, ...codeQLMetrics];
 
-    const result = calculateRiskMetric(pullRequest.number, allMetrics, riskValueTresholds);
+    const result = calculateRiskMetric(allMetrics, riskValueTresholds);
+    result.prNumber = pullRequest.number;
+
     return result;
 }
 

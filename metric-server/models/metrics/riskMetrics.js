@@ -1,10 +1,9 @@
-const calculateRiskMetric = (prNumber, metrics, riskValueTresholds) => {
+const calculateRiskMetric = (metrics, riskValueTresholds) => {
     const enabledMetrics = metrics.filter(metric => metric.checked);
     const riskValue = calculateRiskValue(enabledMetrics);
     const riskCategory = calculateRiskCategory(riskValue, riskValueTresholds);
 
     return {
-        prNumber: prNumber,
         analysis: {
             riskValue: riskValue,
             riskCategory: riskCategory,
@@ -22,31 +21,25 @@ const calculateRiskValue = (enabledMetrics) => {
         coefficientSum += metric.coefficient;
     });
 
-    return ((metricSum / coefficientSum) * 25).toFixed(2);
+    return (metricSum / coefficientSum).toFixed(2);
 }
 
 const calculateRiskCategory = (value, metricLevel) => {
-    let category;
+    value = value / 10; // Should be multiply by 100
 
-    value = value / 100;
-
-    if (metricLevel.e.lower_bound / 100 <= value && value <= metricLevel.e.upper_bound / 100) {
-        category = 'E';
+    if (metricLevel.a.lower_bound <= value && value <= metricLevel.a.upper_bound) {
+        return 'A';
     }
-    else if (metricLevel.d.lower_bound / 100 < value && value <= metricLevel.d.upper_bound / 100) {
-        category = 'D';
+    else if (metricLevel.b.lower_bound < value && value <= metricLevel.b.upper_bound) {
+        return 'B';
     }
-    else if (metricLevel.c.lower_bound / 100 < value && value <= metricLevel.c.upper_bound / 100) {
-        category = 'C';
+    else if (metricLevel.c.lower_bound < value && value <= metricLevel.c.upper_bound) {
+        return 'C';
     }
-    else if (metricLevel.b.lower_bound / 100 < value && value <= metricLevel.b.upper_bound / 100) {
-        category = 'B';
+    else if (metricLevel.d.lower_bound < value && value <= metricLevel.d.upper_bound) {
+        return 'D';
     }
-    else if (metricLevel.a.lower_bound / 100 <= value && value <= metricLevel.a.upper_bound / 100) {
-        category = 'A';
-    }
-
-    return category
+    return 'E';
 }
 
 export default calculateRiskMetric;
