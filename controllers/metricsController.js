@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import calculate from '../models/metricCalculator.js';
 import { getOrInitRepo } from '../models/Repository.js';
+import log from '../utils/logger.js';
 
 /*
  * @desc    Fetch metrics for all pull requests in a repository
@@ -11,6 +12,8 @@ import { getOrInitRepo } from '../models/Repository.js';
 const getMetricsForPullRequests = asyncHandler(async (req, res) => {
 	const prNumbers = req.query.prNumbers ? req.query.prNumbers.split(',').map(Number) : [];
 	const githubHead = req.githubHead;
+
+	log('Request received');
 
 	const repo = await getOrInitRepo(githubHead.repoOwner, githubHead.repoName);
 
@@ -27,6 +30,7 @@ const getMetricsForPullRequests = asyncHandler(async (req, res) => {
 		}
 
 		res.json(result);
+		log('Response sent');
 	} else {
 		res.status(404);
 		throw new Error('Error while retrieving PR infos.');
@@ -41,6 +45,8 @@ const getMetricsForPullRequest = asyncHandler(async (req, res) => {
 	const prNumber = parseInt(req.params.prNumber);
 	const githubHead = req.githubHead;
 
+	log('Request received', prNumber);
+
 	const repo = await getOrInitRepo(githubHead.repoOwner, githubHead.repoName);
 
 	if (repo) {
@@ -54,6 +60,7 @@ const getMetricsForPullRequest = asyncHandler(async (req, res) => {
 		}
 
 		res.json(result);
+		log('Response sent', prNumber);
 	} else {
 		res.status(404);
 		throw new Error('Error while retrieving PR infos.');
