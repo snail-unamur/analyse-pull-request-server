@@ -1,14 +1,14 @@
 import JSZip from 'jszip';
 import askGitHub from './githubRepoRequest.js';
-import { logGithub } from "../utils/logger.js";  
+import { logGithub } from "../utils/logger.js";
 
 const RUN_NAME = 'CodeQL';
-const ARTIFACT_FILE_NAME= 'codeql-results';
+const ARTIFACT_FILE_NAME = 'codeql-results';
 
 const retreiveCodeQLArtifact = async (githubHead, prNumber) => {
     logGithub(`Retrieving head for PR#${prNumber}`);
     const prHead = await retrievePullRequestHead(githubHead, prNumber)
-    
+
     logGithub(`Retrieving run id for PR#${prNumber}`);
     const runId = await retrieveRunIdForPR(githubHead, prNumber, prHead);
 
@@ -21,7 +21,7 @@ const retreiveCodeQLArtifact = async (githubHead, prNumber) => {
     return artifact;
 }
 
-const retrieveRunIdForPR = async (githubHead,  prNumber, prHead) => {
+const retrieveRunIdForPR = async (githubHead, prNumber, prHead) => {
     const queryUrl = `actions/runs?head_sha=${prHead}&event=pull_request&status=completed`;
 
     const response = await askGitHub(githubHead, queryUrl)
@@ -60,12 +60,13 @@ const retrieveCodeQLArtifact = async (githubHead, artifactId) => {
         const zipBuffer = await response.arrayBuffer();
 
         const zip = await JSZip.loadAsync(zipBuffer);
-        const sarifFile = zip.file('java.sarif');
+        const sarifFileName = Object.keys(zip.files).find(name => name.endsWith('.sarif'));
 
-        if (!sarifFile) {
-            throw new Error('CodeQL SARIF file "java.sarif" not found in artifact.');
+        if (!sarifFileName) {
+            throw new Error('CodeQL SARIF file not found in artifact.');
         }
 
+        const sarifFile = zip.file(sarifFileName);
         const sarifContent = await sarifFile.async('string');
         return JSON.parse(sarifContent);
     } catch (error) {

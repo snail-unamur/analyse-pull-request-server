@@ -1,9 +1,8 @@
 import retreiveCodeQLArtifact from "../../api/codeQLRequest.js";
 import { retrieveFileInPR } from "../../api/pullRequest.js";
-import format from "../../utils/codeQLFormatName.js";
 
-const AFFERENT_COUPLING_METRIC_ID = 'java/afferent-coupling';
-const EFFERENT_COUPLING_METRIC_ID = 'java/efferent-coupling';
+const AFFERENT_COUPLING_METRIC_ID = 'afferent-coupling';
+const EFFERENT_COUPLING_METRIC_ID = 'efferent-coupling';
 const METRIC_SOURCE = 'CodeQL';
 
 const retreiveCodeQLMetrics = async (githubHead, metric, prNumber) => {
@@ -18,7 +17,7 @@ const retreiveCodeQLMetrics = async (githubHead, metric, prNumber) => {
     ]);
 
     const codeQLMetrics = extractMetricsFromArtifact(artifact);
-    const updatedModuleMetrics = keepModifiedFile(modifiedFileInPr, codeQLMetrics);
+    const updatedModuleMetrics = codeQLMetrics.filter(m => modifiedFileInPr.includes(m.path));
 
     const meanInstability = calculateMeanInstability(updatedModuleMetrics);
 
@@ -30,20 +29,15 @@ const retreiveCodeQLMetrics = async (githubHead, metric, prNumber) => {
 
 const extractMetricsFromArtifact = (codeQLArtefact) => {
     const allMetrics = codeQLArtefact.runs[0].properties.metricResults;
-    const afferentMetric = allMetrics.filter(m => m.rule.id === AFFERENT_COUPLING_METRIC_ID);
-    const efferentMetric = allMetrics.filter(m => m.rule.id === EFFERENT_COUPLING_METRIC_ID);
+
+    const afferentMetric = allMetrics.filter(m => m.ruleId.includes(AFFERENT_COUPLING_METRIC_ID));
+    const efferentMetric = allMetrics.filter(m => m.ruleId.includes(EFFERENT_COUPLING_METRIC_ID));
 
     return afferentMetric.map(m => ({
-        moduleName: m.message.text,
+        path: m.message.text,
         afferent: m.value,
         efferent: efferentMetric.find(ef => ef.message.text === m.message.text)?.value
     }));
-}
-
-const keepModifiedFile = (modifiedFile, artifact) => {
-    const formattedFileName = modifiedFile.map(mf => format(mf));
-
-    return artifact.filter(art => formattedFileName.find(format => format === art.moduleName));
 }
 
 const calculateMeanInstability = (metrics) => {
