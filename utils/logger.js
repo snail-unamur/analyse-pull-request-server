@@ -1,10 +1,10 @@
-const log = (message, prNumber) => {
+export const log = (message, prNumber) => {
     let logMessage = `[${new Date().toLocaleString()}]`;
 
     if (prNumber) {
        logMessage = logMessage.concat(`[PR #${prNumber}] `);
     } else {
-        logMessage = logMessage.concat('[PR batching] ');
+        logMessage = logMessage.concat('[PR batch] ');
     }
 
     logMessage = logMessage.concat(message);
@@ -12,4 +12,14 @@ const log = (message, prNumber) => {
     console.log(logMessage);
 }
 
-export default log;
+export const logGithub = (message) => {
+    let logMessage = `[${new Date().toLocaleString()}][ask GitHub] ${message}`;
+
+    console.log(logMessage);
+}
+
+export const logSonar = (message) => {
+    let logMessage = `[${new Date().toLocaleString()}][ask Sonar] ${message}`;
+
+    console.log(logMessage);
+}

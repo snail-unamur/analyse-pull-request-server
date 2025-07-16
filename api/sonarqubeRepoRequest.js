@@ -1,7 +1,11 @@
+import { logSonar } from "../utils/logger.js";
+
 const askSonarQube = async (projectKey, prNumber, metricsQuery) => {
     const sonarqubeToken = process.env.SONARQUBE_CLOUD_TOKEN;
     const sonarqubeUrl = process.env.SONARQUBE_CLOUD_URL;
     const url = `${sonarqubeUrl}/api/measures/component?metricKeys=${metricsQuery}&component=${projectKey}&pullRequest=${prNumber}`;
+
+    logSonar('Retrieving Sonar metrics');
 
     const response = await fetch(url, {
         headers: {

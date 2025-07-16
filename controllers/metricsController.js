@@ -1,7 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import calculate from '../models/metricCalculator.js';
 import { getOrInitRepo } from '../models/Repository.js';
-import log from '../utils/logger.js';
+import { log } from '../utils/logger.js';
 
 /*
  * @desc    Fetch metrics for all pull requests in a repository

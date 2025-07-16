@@ -12,8 +12,11 @@ const retreiveCodeQLMetrics = async (githubHead, metric, prNumber) => {
         return [];
     }
 
-    const artifact = await retreiveCodeQLArtifact(githubHead, prNumber);
-    const modifiedFileInPr = await retrieveFileInPR(githubHead, prNumber);
+    const [artifact, modifiedFileInPr] = await Promise.all([
+        retreiveCodeQLArtifact(githubHead, prNumber),
+        retrieveFileInPR(githubHead, prNumber)
+    ]);
+
     const codeQLMetrics = extractMetricsFromArtifact(artifact);
     const updatedModuleMetrics = keepModifiedFile(modifiedFileInPr, codeQLMetrics);
 

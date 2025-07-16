@@ -1,14 +1,21 @@
 import JSZip from 'jszip';
 import askGitHub from './githubRepoRequest.js';
+import { logGithub } from "../utils/logger.js";  
 
 const RUN_NAME = 'CodeQL';
 const ARTIFACT_FILE_NAME= 'codeql-results';
 
 const retreiveCodeQLArtifact = async (githubHead, prNumber) => {
+    logGithub(`Retrieving head for PR#${prNumber}`);
     const prHead = await retrievePullRequestHead(githubHead, prNumber)
-
+    
+    logGithub(`Retrieving run id for PR#${prNumber}`);
     const runId = await retrieveRunIdForPR(githubHead, prNumber, prHead);
+
+    logGithub(`Retrieving artifact id for PR#${prNumber}`);
     const artifactId = await retrieveCodeQLArtifactId(githubHead, runId);
+
+    logGithub(`Retrieving artifact for PR#${prNumber}`);
     const artifact = await retrieveCodeQLArtifact(githubHead, artifactId);
 
     return artifact;

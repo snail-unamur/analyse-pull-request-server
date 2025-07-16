@@ -1,7 +1,7 @@
 import retreiveSonarQubeMetrics from './metrics/sonarQubeMetrics.js';
 import calculateRiskMetric from './metrics/riskMetrics.js';
 import retreiveCodeQLMetrics from './metrics/codeQLMetrics.js';
-import log from '../utils/logger.js';
+import { log } from '../utils/logger.js';
 
 export const calculate = async (githubHead, settings, prNumber) => {
     const metric = settings.analysis_metrics;
@@ -20,8 +20,6 @@ export const calculate = async (githubHead, settings, prNumber) => {
 
     const result = calculateRiskMetric(allMetrics, riskValueTresholds);
     result.prNumber = prNumber;
-
-    log('All metrics calculated', prNumber);
 
     return result;
 }
