@@ -74,7 +74,6 @@ const retrievePullRequestHead = async (githubHead, prNumber) => {
     const data = await response.json();
 
     return data.head.sha;
-
 }
 
 export default retreiveCodeQLArtifact;
