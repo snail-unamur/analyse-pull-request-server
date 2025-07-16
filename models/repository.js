@@ -21,6 +21,7 @@ const settingsSchema = new Schema({
 			{ id: 'bugs', name: 'Bugs', checked: false, coefficient: 1.5, source: 'SonarQube' },
 			{ id: 'vulnerabilities', name: 'Vulnerabilities', checked: false, coefficient: 1.5, source: 'SonarQube' },
 			{ id: 'instability', name: 'Instability', checked: true, coefficient: 1.5, source: 'CodeQL' },
+			{ id: 'new_coverage', name: 'Coverage for New Lines', checked: true, coefficiant: 1.5, source: 'SonarQube' }
 		],
 	},
 	risk_threshold_value: {

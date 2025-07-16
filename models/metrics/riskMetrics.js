@@ -1,5 +1,5 @@
 const calculateRiskMetric = (metrics, riskValueTresholds) => {
-    const enabledMetrics = metrics.filter(metric => metric.checked);
+    const enabledMetrics = metrics.filter(metric => metric.checked && !isNaN(metric.value));
     const riskValue = calculateRiskValue(enabledMetrics);
     const riskCategory = calculateRiskCategory(riskValue, riskValueTresholds);
 
