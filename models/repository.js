@@ -9,41 +9,126 @@ const settingsSchema = new Schema({
 				name: String,
 				checked: Boolean,
 				source: String,
-				coefficient: Number,
 			},
 		],
 		default: [
-			{ id: 'complexity', name: 'Cyclomatic Complexity', checked: true, coefficient: 1.5, source: 'SonarQube' },
-			{ id: 'cognitive_complexity', name: 'Cognitive Complexity', checked: true, coefficient: 1.5, source: 'SonarQube' },
-			{ id: 'duplicated_lines_density', name: 'Duplicated Lines Density', checked: false, coefficient: 1.5, source: 'SonarQube' },
-			{ id: 'ncloc', name: 'Lines of Code', checked: false, coefficient: 1.5, source: 'SonarQube' },
-			{ id: 'code_smells', name: 'Code Smells', checked: false, coefficient: 1.5, source: 'SonarQube' },
-			{ id: 'bugs', name: 'Bugs', checked: false, coefficient: 1.5, source: 'SonarQube' },
-			{ id: 'vulnerabilities', name: 'Vulnerabilities', checked: false, coefficient: 1.5, source: 'SonarQube' },
-			{ id: 'instability', name: 'Instability', checked: true, coefficient: 1.5, source: 'CodeQL' },
-			{ id: 'new_coverage', name: 'Coverage for New Lines', checked: true, coefficiant: 1.5, source: 'SonarQube' }
+			{ id: 'complexity', name: 'Cyclomatic', checked: true, source: 'SonarQube' },
+			{ id: 'cognitive_complexity', name: 'Cognitive', checked: true, source: 'SonarQube' },
+			{ id: 'ncloc', name: 'LoC', checked: true, source: 'SonarQube' },
+			{ id: 'instability', name: 'Instability', checked: true, source: 'CodeQL' },
+			{ id: 'new_coverage', name: 'Coverage', checked: true, source: 'SonarQube' }
 		],
 	},
-	risk_threshold_value: {
-		a: {
-			lower_bound: { type: Number, default: 0 },
-			upper_bound: { type: Number, default: 20 },
+	radar_thresholds: {
+		complexity: {
+			a: {
+				lower_bound: { type: Number, default: 0 },
+				upper_bound: { type: Number, default: 3 },
+			},
+			b: {
+				lower_bound: { type: Number, default: 3 },
+				upper_bound: { type: Number, default: 6 },
+			},
+			c: {
+				lower_bound: { type: Number, default: 6 },
+				upper_bound: { type: Number, default: 9 },
+			},
+			d: {
+				lower_bound: { type: Number, default: 9 },
+				upper_bound: { type: Number, default: 12 },
+			},
+			e: {
+				lower_bound: { type: Number, default: 12 },
+				upper_bound: { type: Number, default: 15 }, // Upper limit is +15
+			},
 		},
-		b: {
-			lower_bound: { type: Number, default: 20 },
-			upper_bound: { type: Number, default: 40 },
+		cognitive_complexity: {
+			a: {
+				lower_bound: { type: Number, default: 0 },
+				upper_bound: { type: Number, default: 3 },
+			},
+			b: {
+				lower_bound: { type: Number, default: 3 },
+				upper_bound: { type: Number, default: 6 },
+			},
+			c: {
+				lower_bound: { type: Number, default: 6 },
+				upper_bound: { type: Number, default: 9 },
+			},
+			d: {
+				lower_bound: { type: Number, default: 9 },
+				upper_bound: { type: Number, default: 12 },
+			},
+			e: {
+				lower_bound: { type: Number, default: 12 },
+				upper_bound: { type: Number, default: 15 }, // Upper limit is +15
+			},
 		},
-		c: {
-			lower_bound: { type: Number, default: 40 },
-			upper_bound: { type: Number, default: 60 },
+		ncloc: {
+			a: {
+				lower_bound: { type: Number, default: 0 },
+				upper_bound: { type: Number, default: 5 },
+			},
+			b: {
+				lower_bound: { type: Number, default: 5 },
+				upper_bound: { type: Number, default: 10 },
+			},
+			c: {
+				lower_bound: { type: Number, default: 10 },
+				upper_bound: { type: Number, default: 20 },
+			},
+			d: {
+				lower_bound: { type: Number, default: 20 },
+				upper_bound: { type: Number, default: 30 },
+			},
+			e: {
+				lower_bound: { type: Number, default: 30 },
+				upper_bound: { type: Number, default: 40 }, // Upper limit is +40
+			},
 		},
-		d: {
-			lower_bound: { type: Number, default: 60 },
-			upper_bound: { type: Number, default: 80 },
+		instability: {
+			a: {
+				lower_bound: { type: Number, default: 0 },
+				upper_bound: { type: Number, default: 0.2 },
+			},
+			b: {
+				lower_bound: { type: Number, default: 0.2 },
+				upper_bound: { type: Number, default: 0.4 },
+			},
+			c: {
+				lower_bound: { type: Number, default: 0.4 },
+				upper_bound: { type: Number, default: 0.6 },
+			},
+			d: {
+				lower_bound: { type: Number, default: 0.6 },
+				upper_bound: { type: Number, default: 0.8 },
+			},
+			e: {
+				lower_bound: { type: Number, default: 0.8 },
+				upper_bound: { type: Number, default: 1 }, // Upper limit is 100%
+			},
 		},
-		e: {
-			lower_bound: { type: Number, default: 80 },
-			upper_bound: { type: Number, default: 100 },
+		new_coverage: {
+			a: {
+				lower_bound: { type: Number, default: 1 },
+				upper_bound: { type: Number, default: 0.8 },
+			},
+			b: {
+				lower_bound: { type: Number, default: 0.8 },
+				upper_bound: { type: Number, default: 0.6 },
+			},
+			c: {
+				lower_bound: { type: Number, default: 0.6 },
+				upper_bound: { type: Number, default: 0.4 },
+			},
+			d: {
+				lower_bound: { type: Number, default: 0.4 },
+				upper_bound: { type: Number, default: 0.2 },
+			},
+			e: {
+				lower_bound: { type: Number, default: 0.2 },
+				upper_bound: { type: Number, default: 0 }, // Upper limit is 0%
+			},
 		},
 	}
 });
