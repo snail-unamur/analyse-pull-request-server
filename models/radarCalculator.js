@@ -1,11 +1,16 @@
+import metricsDescription from '../metricsDescription.json' with { type: 'json' };
+
 const calculateRadarMetrics = (metrics, thresholds) => {
     return metrics.map(m => {
         const threshold = thresholds[m.id];
+        const metric = metricsDescription[m.id];
         const radarValue = calculateValue(m.value, threshold);
 
         return {
             id: m.id,
             name: m.name,
+            fullName: metric.fullName,
+            description: metric.description,
             radarValue: radarValue
         }
     })

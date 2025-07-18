@@ -6,17 +6,16 @@ const settingsSchema = new Schema({
 		type: [
 			{
 				id: String,
-				name: String,
 				checked: Boolean,
 				source: String,
 			},
 		],
 		default: [
-			{ id: 'complexity', name: 'Cyclomatic', checked: true, source: 'SonarQube' },
-			{ id: 'cognitive_complexity', name: 'Cognitive', checked: true, source: 'SonarQube' },
-			{ id: 'ncloc', name: 'LoC', checked: true, source: 'SonarQube' },
-			{ id: 'instability', name: 'Instability', checked: true, source: 'CodeQL' },
-			{ id: 'new_coverage', name: 'Coverage', checked: true, source: 'SonarQube' }
+			{ id: 'complexity', checked: true, source: 'SonarQube' },
+			{ id: 'cognitive_complexity', checked: true, source: 'SonarQube' },
+			{ id: 'ncloc', checked: true, source: 'SonarQube' },
+			{ id: 'instability', checked: true, source: 'CodeQL' },
+			{ id: 'new_coverage', checked: true, source: 'SonarQube' }
 		],
 	},
 	radar_thresholds: {

@@ -1,0 +1,27 @@
+{
+    "complexity": {
+        "name": "Cyclomatic",
+        "fullName": "Cyclomatic Complexity",
+        "description": "A quantitative metric used to calculate the number of paths through the code."
+    },
+    "cognitive_complexity": {
+        "name": "Cognitive",
+        "fullName": "Cognitive Complexity",
+        "description": "A qualification of how hard it is to understand the code's control flow."
+    },
+    "ncloc": {
+        "name": "Loc",
+        "fullName": "Lines of Code",
+        "description": "The number of physical lines that contain at least one character."
+    },
+    "instability": {
+        "name": "Instability",
+        "fullName": "Instability",
+        "description": "The relative susceptibility to breaking changes."
+    },
+    "new_coverage": {
+        "name": "Coverage",
+        "fullName": "New Line Coverage",
+        "description": "A mix of line coverage and condition coverage on new lines."
+    }
+}
