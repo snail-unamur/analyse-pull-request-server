@@ -8,7 +8,7 @@ const calculateRadarMetrics = (metrics, thresholds) => {
 
         return {
             id: m.id,
-            name: m.name,
+            name: metric.name,
             fullName: metric.fullName,
             description: metric.description,
             radarValue: radarValue
