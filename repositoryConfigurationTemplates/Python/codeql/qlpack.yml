@@ -1,0 +1,5 @@
+name: snail/coupling-metrics
+version: 0.0.1
+library: false
+dependencies:
+  codeql/python-all: "*"
