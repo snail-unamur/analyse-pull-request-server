@@ -3,14 +3,21 @@ import metricsDescription from '../metricsDescription.json' with { type: 'json' 
 const calculateRadarMetrics = (metrics, thresholds) => {
     return metrics.map(m => {
         const threshold = thresholds[m.id];
-        const metric = metricsDescription[m.id];
-        const radarValue = calculateValue(m.value, threshold);
+        const metricDescription = metricsDescription[m.id];
+        let metricValue = m.value;
+
+        // Special handle for new_coverage metric that need to use the complementary
+        if (m.id === 'new_coverage') {
+            metricValue = 1 - m.value;
+        }
+
+        const radarValue = calculateValue(metricValue, threshold);
 
         return {
             id: m.id,
-            name: metric.name,
-            fullName: metric.fullName,
-            description: metric.description,
+            name: metricDescription.name,
+            fullName: metricDescription.fullName,
+            description: metricDescription.description,
             radarValue: radarValue
         }
     })

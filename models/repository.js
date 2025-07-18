@@ -109,24 +109,24 @@ const settingsSchema = new Schema({
 		},
 		new_coverage: {
 			a: {
-				lower_bound: { type: Number, default: 1 },
-				upper_bound: { type: Number, default: 0.8 },
-			},
-			b: {
-				lower_bound: { type: Number, default: 0.8 },
-				upper_bound: { type: Number, default: 0.6 },
-			},
-			c: {
-				lower_bound: { type: Number, default: 0.6 },
-				upper_bound: { type: Number, default: 0.4 },
-			},
-			d: {
-				lower_bound: { type: Number, default: 0.4 },
+				lower_bound: { type: Number, default: 0 },
 				upper_bound: { type: Number, default: 0.2 },
 			},
-			e: {
+			b: {
 				lower_bound: { type: Number, default: 0.2 },
-				upper_bound: { type: Number, default: 0 }, // Upper limit is 0%
+				upper_bound: { type: Number, default: 0.4 },
+			},
+			c: {
+				lower_bound: { type: Number, default: 0.4 },
+				upper_bound: { type: Number, default: 0.6 },
+			},
+			d: {
+				lower_bound: { type: Number, default: 0.6 },
+				upper_bound: { type: Number, default: 0.8 },
+			},
+			e: {
+				lower_bound: { type: Number, default: 0.8 },
+				upper_bound: { type: Number, default: 1 }, // Upper limit is 100%
 			},
 		},
 	}
