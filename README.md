@@ -54,5 +54,5 @@ npm start
 To execute the unit tests, run:
 
 ```bash
-npm server
+npm test
 ```
