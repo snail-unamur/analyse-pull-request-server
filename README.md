@@ -46,7 +46,7 @@ Before the server can analyze pull requests, the target repository must be confi
 To start the server, run:
 
 ```bash
-npm server
+npm start
 ```
 
 ## 🧪 Run test
