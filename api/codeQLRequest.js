@@ -5,7 +5,7 @@ import { logGithub } from "../utils/logger.js";
 const RUN_NAME = 'CodeQL';
 const ARTIFACT_FILE_NAME = 'codeql-results';
 
-const retreiveCodeQLArtifact = async (githubHead, prNumber) => {
+const retrieveCodeQLArtifact = async (githubHead, prNumber) => {
     logGithub(`Retrieving head for PR#${prNumber}`);
     const prHead = await retrievePullRequestHead(githubHead, prNumber)
 
@@ -16,7 +16,7 @@ const retreiveCodeQLArtifact = async (githubHead, prNumber) => {
     const artifactId = await retrieveCodeQLArtifactId(githubHead, runId);
 
     logGithub(`Retrieving artifact for PR#${prNumber}`);
-    const artifact = await retrieveCodeQLArtifact(githubHead, artifactId);
+    const artifact = await retrieveCodeQLArtifactFromGitHub(githubHead, artifactId);
 
     return artifact;
 }
@@ -52,7 +52,7 @@ const retrieveCodeQLArtifactId = async (githubHead, runId) => {
     return artefact.id;
 }
 
-const retrieveCodeQLArtifact = async (githubHead, artifactId) => {
+const retrieveCodeQLArtifactFromGitHub = async (githubHead, artifactId) => {
     const artifactUrl = `actions/artifacts/${artifactId}/zip`;
 
     try {
@@ -84,4 +84,4 @@ const retrievePullRequestHead = async (githubHead, prNumber) => {
     return data.head.sha;
 }
 
-export default retreiveCodeQLArtifact;
+export default retrieveCodeQLArtifact;

@@ -1,18 +1,18 @@
-import retreiveCodeQLArtifact from "../../api/codeQLRequest.js";
+import retrieveCodeQLArtifact from "../../api/codeQLRequest.js";
 import { retrieveFileInPR } from "../../api/pullRequest.js";
 
 const AFFERENT_COUPLING_METRIC_ID = 'afferent-coupling';
 const EFFERENT_COUPLING_METRIC_ID = 'efferent-coupling';
 const METRIC_SOURCE = 'CodeQL';
 
-const retreiveCodeQLMetrics = async (githubHead, metric, prNumber) => {
+const retrieveCodeQLMetrics = async (githubHead, metric, prNumber) => {
     const metrics = metric.filter(metric => metric.source === METRIC_SOURCE);
     if (!metrics.some(m => m.checked)) {
         return [];
     }
 
     const [artifact, modifiedFileInPr] = await Promise.all([
-        retreiveCodeQLArtifact(githubHead, prNumber),
+        retrieveCodeQLArtifact(githubHead, prNumber),
         retrieveFileInPR(githubHead, prNumber)
     ]);
 
@@ -55,4 +55,4 @@ const calculateInstabilityMetric = (metric) => {
     return total === 0 ? 0 : efferent / total;
 }
 
-export default retreiveCodeQLMetrics;
+export default retrieveCodeQLMetrics;

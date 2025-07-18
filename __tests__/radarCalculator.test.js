@@ -1,5 +1,5 @@
 import calculateRadarMetrics from '../models/radarCalculator.js';
-import { metricsCatA, metricsCatB, metricsCatC, metricsCatD, metricsCatE, metricsWorstCase, metricsBestCase, pullRequest } from './testData.js';
+import { metricsCatA, metricsCatB, metricsCatC, metricsCatD, metricsCatE, metricsWorstCase, metricsBestCase, pullRequest } from '../dataExamples/dataExamples.js';
 
 describe('Testing of the radar calucation ', () => {
 

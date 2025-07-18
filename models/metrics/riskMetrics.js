@@ -1,4 +1,8 @@
 const calculateRiskMetric = (radarMetrics) => {
+    if (radarMetrics.length == 0) {
+        return [0, 'A'];
+    }
+
     const total = radarMetrics.reduce((acc, m) => acc + m.radarValue, 0);
 
     const value = Math.floor(total / radarMetrics.length);

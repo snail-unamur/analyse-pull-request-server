@@ -124,18 +124,22 @@ export const sonarMetricsCatA = [
     {
         id: 'complexity',
         value: 2,
+        checked: true,
     },
     {
         id: 'cognitive_complexity',
         value: 2,
+        checked: true,
     },
     {
         id: 'ncloc',
-        value: 2
+        value: 2,
+        checked: true,
     },
     {
         id: 'new_coverage',
-        value: 0.9
+        value: 0.9,
+        checked: true,
     }
 ];
 
@@ -143,6 +147,7 @@ export const codeqlMetricsCatA = [
     {
         id: 'instability',
         value: 0.1,
+        checked: true,
     },
 ];
 
@@ -152,18 +157,22 @@ export const sonarMetricsCatB = [
     {
         id: 'complexity',
         value: 4,
+        checked: true,
     },
     {
         id: 'cognitive_complexity',
         value: 4,
+        checked: true,
     },
     {
         id: 'ncloc',
-        value: 7
+        value: 7,
+        checked: true,
     },
     {
         id: 'new_coverage',
-        value: 0.7
+        value: 0.7,
+        checked: true,
     }
 ];
 
@@ -171,6 +180,7 @@ export const codeqlMetricsCatB = [
     {
         id: 'instability',
         value: 0.3,
+        checked: true,
     },
 ];
 
@@ -180,18 +190,22 @@ export const sonarMetricsCatC = [
     {
         id: 'complexity',
         value: 7,
+        checked: true,
     },
     {
         id: 'cognitive_complexity',
         value: 7,
+        checked: true,
     },
     {
         id: 'ncloc',
-        value: 15
+        value: 15,
+        checked: true,
     },
     {
         id: 'new_coverage',
-        value: 0.5
+        value: 0.5,
+        checked: true,
     }
 ];
 
@@ -199,6 +213,7 @@ export const codeqlMetricsCatC = [
     {
         id: 'instability',
         value: 0.5,
+        checked: true,
     },
 ];
 
@@ -208,18 +223,23 @@ export const sonarMetricsCatD = [
     {
         id: 'complexity',
         value: 10,
+        checked: true,
+
     },
     {
         id: 'cognitive_complexity',
         value: 10,
+        checked: true,
     },
     {
         id: 'ncloc',
-        value: 25
+        value: 25,
+        checked: true,
     },
     {
         id: 'new_coverage',
-        value: 0.3
+        value: 0.3,
+        checked: true,
     }
 ];
 
@@ -227,6 +247,7 @@ export const codeqlMetricsCatD = [
     {
         id: 'instability',
         value: 0.7,
+        checked: true,
     },
 ];
 
@@ -236,18 +257,22 @@ export const sonarMetricsCatE = [
     {
         id: 'complexity',
         value: 20,
+        checked: true,
     },
     {
         id: 'cognitive_complexity',
         value: 20,
+        checked: true,
     },
     {
         id: 'ncloc',
-        value: 35
+        value: 35,
+        checked: true,
     },
     {
         id: 'new_coverage',
-        value: 0.1
+        value: 0.1,
+        checked: true,
     }
 ];
 
@@ -255,6 +280,7 @@ export const codeqlMetricsCatE = [
     {
         id: 'instability',
         value: 0.9,
+        checked: true,
     },
 ];
 
@@ -264,18 +290,22 @@ export const sonarMetricsWorstCase = [
     {
         id: 'complexity',
         value: 100,
+        checked: true,
     },
     {
         id: 'cognitive_complexity',
         value: 100,
+        checked: true,
     },
     {
         id: 'ncloc',
-        value: 100
+        value: 100,
+        checked: true,
     },
     {
         id: 'new_coverage',
-        value: 0.0
+        value: 0.0,
+        checked: true,
     }
 ];
 
@@ -283,6 +313,7 @@ export const codeqlMetricsWorstCase = [
     {
         id: 'instability',
         value: 1.0,
+        checked: true,
     },
 ];
 
@@ -292,18 +323,22 @@ export const sonarMetricsBestCase = [
     {
         id: 'complexity',
         value: 0,
+        checked: true,
     },
     {
         id: 'cognitive_complexity',
         value: 0,
+        checked: true,
     },
     {
         id: 'ncloc',
-        value: 0
+        value: 0,
+        checked: true,
     },
     {
         id: 'new_coverage',
-        value: 1.0
+        value: 1.0,
+        checked: true,
     }
 ];
 
@@ -311,6 +346,7 @@ export const codeqlMetricsBestCase = [
     {
         id: 'instability',
         value: 0.0,
+        checked: true,
     },
 ];
 
