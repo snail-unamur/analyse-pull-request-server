@@ -1,10 +1,10 @@
 import calculateRadarMetrics from '../models/radarCalculator.js';
-import { metricsCatA, metricsCatB, metricsCatC, metricsCatD, metricsCatE, metricsWorstCase, metricsBestCase, pullRequest } from '../dataExamples/dataExamples.js';
+import { metricsCatA, metricsCatB, metricsCatC, metricsCatD, metricsCatE, metricsWorstCase, metricsBestCase, configuration } from '../dataExamples/dataExamples.js';
 
 describe('Testing of the radar calucation ', () => {
 
     test('Category A', () => {
-        const radarMetrics = calculateRadarMetrics(metricsCatA, pullRequest.radar_thresholds);
+        const radarMetrics = calculateRadarMetrics(metricsCatA, configuration);
 
         radarMetrics.forEach(m => {
             expect(m.radarValue).toBe(0);
@@ -12,7 +12,7 @@ describe('Testing of the radar calucation ', () => {
     })
 
     test('Category B', () => {
-        const radarMetrics = calculateRadarMetrics(metricsCatB, pullRequest.radar_thresholds);
+        const radarMetrics = calculateRadarMetrics(metricsCatB, configuration);
 
         radarMetrics.forEach(m => {
             expect(m.radarValue).toBe(1);
@@ -20,7 +20,7 @@ describe('Testing of the radar calucation ', () => {
     })
 
     test('Category C', () => {
-        const radarMetrics = calculateRadarMetrics(metricsCatC, pullRequest.radar_thresholds);
+        const radarMetrics = calculateRadarMetrics(metricsCatC, configuration);
 
         radarMetrics.forEach(m => {
             expect(m.radarValue).toBe(2);
@@ -28,7 +28,7 @@ describe('Testing of the radar calucation ', () => {
     })
 
     test('Category D', () => {
-        const radarMetrics = calculateRadarMetrics(metricsCatD, pullRequest.radar_thresholds);
+        const radarMetrics = calculateRadarMetrics(metricsCatD, configuration);
 
         radarMetrics.forEach(m => {
             expect(m.radarValue).toBe(3);
@@ -36,7 +36,7 @@ describe('Testing of the radar calucation ', () => {
     })
 
     test('Category E', () => {
-        const radarMetrics = calculateRadarMetrics(metricsCatE, pullRequest.radar_thresholds);
+        const radarMetrics = calculateRadarMetrics(metricsCatE, configuration);
 
         radarMetrics.forEach(m => {
             expect(m.radarValue).toBe(4);
@@ -44,7 +44,7 @@ describe('Testing of the radar calucation ', () => {
     })
 
     test('Best case', () => {
-        const radarMetrics = calculateRadarMetrics(metricsBestCase, pullRequest.radar_thresholds);
+        const radarMetrics = calculateRadarMetrics(metricsBestCase, configuration);
 
         radarMetrics.forEach(m => {
             expect(m.radarValue).toBe(0);
@@ -52,7 +52,7 @@ describe('Testing of the radar calucation ', () => {
     })
 
     test('Worst case', () => {
-        const radarMetrics = calculateRadarMetrics(metricsWorstCase, pullRequest.radar_thresholds);
+        const radarMetrics = calculateRadarMetrics(metricsWorstCase, configuration);
 
         radarMetrics.forEach(m => {
             expect(m.radarValue).toBe(4);
