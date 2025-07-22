@@ -24,6 +24,7 @@ const getMetricsForPullRequests = asyncHandler(async (req, res) => {
 		res.json(result);
 		log('Response sent');
 	} catch (error) {
+		log(`Failed: ${error}`);
 		res.status(500);
 		throw new Error(`Error calculating metrics: ${error.message}`);
 	}
@@ -46,6 +47,7 @@ const getMetricsForPullRequest = asyncHandler(async (req, res) => {
 		res.json(result);
 		log('Response sent', prNumber);
 	} catch (error) {
+		log(`Failed: ${error}`);
 		res.status(500);
 		throw new Error(`Error calculating metrics: ${error.message}`);
 	}

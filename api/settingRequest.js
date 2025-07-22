@@ -15,7 +15,7 @@ const retrieveConfigurationForRepo = async (githubHead) => {
         const result = yaml.load(yamlString);
         return result;
     } catch (error) {
-        throw new Error('No configuration file found in the repository root.');
+        throw new Error('No configuration file found in the repository root');
     }
 }
 
