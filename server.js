@@ -29,5 +29,5 @@ app.use('/api/:repoOwner/:repoName/pullRequest', metricsRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 6002;
+const PORT = process.env.PORT;
 app.listen(PORT, console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`));
