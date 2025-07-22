@@ -5,7 +5,6 @@ const calculateRadarMetrics = (metrics, metricsConfig) => {
         const config = metricsConfig.find(m => m.id === metric.id);
         const metricDescription = metricsDescription[metric.id];
 
-        // Special handle for new_coverage metric that need to use the complementary
         if (config.complementary) {
             metric.value = 1 - metric.value;
         }
