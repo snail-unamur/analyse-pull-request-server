@@ -1,7 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import calculate from '../models/metricCalculator.js';
-import { getOrInitRepo } from '../models/Repository.js';
 import { log } from '../utils/logger.js';
+import retrieveConfigurationForRepo from '../api/settingRequest.js';
 
 /*
  * @desc    Fetch metrics for all pull requests in a repository
@@ -15,25 +15,17 @@ const getMetricsForPullRequests = asyncHandler(async (req, res) => {
 
 	log('Request received');
 
-	const repo = await getOrInitRepo(githubHead.repoOwner, githubHead.repoName);
-
-	if (repo) {
-		let result = [];
-
-		try {
-			result = await Promise.all(
-				prNumbers.map(number => calculate(githubHead, repo.settings, number))
-			);
-		} catch (error) {
-			res.status(500);
-			throw new Error(`Error calculating metrics: ${error.message}`);
-		}
+	try {
+		const configuration = await retrieveConfigurationForRepo(githubHead);
+		const result = await Promise.all(
+			prNumbers.map(number => calculate(githubHead, configuration, number))
+		);
 
 		res.json(result);
 		log('Response sent');
-	} else {
-		res.status(404);
-		throw new Error('Error while retrieving PR infos.');
+	} catch (error) {
+		res.status(500);
+		throw new Error(`Error calculating metrics: ${error.message}`);
 	}
 });
 
@@ -47,23 +39,15 @@ const getMetricsForPullRequest = asyncHandler(async (req, res) => {
 
 	log('Request received', prNumber);
 
-	const repo = await getOrInitRepo(githubHead.repoOwner, githubHead.repoName);
-
-	if (repo) {
-		let result;
-
-		try {
-			result = await calculate(githubHead, repo.settings, prNumber);
-		} catch (error) {
-			res.status(500);
-			throw new Error(`Error calculating metrics: ${error.message}`);
-		}
+	try {
+		const configuration = await retrieveConfigurationForRepo(githubHead);
+		const result = await calculate(githubHead, configuration, prNumber);
 
 		res.json(result);
 		log('Response sent', prNumber);
-	} else {
-		res.status(404);
-		throw new Error('Error while retrieving PR infos.');
+	} catch (error) {
+		res.status(500);
+		throw new Error(`Error calculating metrics: ${error.message}`);
 	}
 });
 

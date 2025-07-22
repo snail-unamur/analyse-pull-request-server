@@ -5,9 +5,9 @@ const AFFERENT_COUPLING_METRIC_ID = 'afferent-coupling';
 const EFFERENT_COUPLING_METRIC_ID = 'efferent-coupling';
 const METRIC_SOURCE = 'CodeQL';
 
-const retrieveCodeQLMetrics = async (githubHead, metric, prNumber) => {
-    const metrics = metric.filter(metric => metric.source === METRIC_SOURCE);
-    if (!metrics.some(m => m.checked)) {
+const retrieveCodeQLMetrics = async (githubHead, metrics, prNumber) => {
+    const codeQLMetrics = metrics.filter(metric => metric.source === METRIC_SOURCE);
+    if (!codeQLMetrics) {
         return [];
     }
 
@@ -16,15 +16,15 @@ const retrieveCodeQLMetrics = async (githubHead, metric, prNumber) => {
         retrieveFileInPR(githubHead, prNumber)
     ]);
 
-    const codeQLMetrics = extractMetricsFromArtifact(artifact);
-    const updatedModuleMetrics = codeQLMetrics.filter(m => modifiedFileInPr.includes(m.path));
+    const response = extractMetricsFromArtifact(artifact);
+    const updatedModuleMetrics = response.filter(m => modifiedFileInPr.includes(m.path));
 
     const meanInstability = calculateMeanInstability(updatedModuleMetrics);
 
-    metrics[0].value = meanInstability;
-    delete metrics[0]._id;
-
-    return metrics;
+    return [{
+        id: codeQLMetrics[0].id,
+        value: meanInstability
+    }];
 }
 
 const extractMetricsFromArtifact = (codeQLArtefact) => {

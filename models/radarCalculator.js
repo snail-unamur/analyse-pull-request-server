@@ -1,20 +1,19 @@
 import metricsDescription from '../metricsDescription.json' with { type: 'json' };
 
-const calculateRadarMetrics = (metrics, thresholds) => {
-    return metrics.map(m => {
-        const threshold = thresholds[m.id];
-        const metricDescription = metricsDescription[m.id];
-        let metricValue = m.value;
+const calculateRadarMetrics = (metrics, metricsConfig) => {
+    return metrics.map(metric => {
+        const config = metricsConfig.find(m => m.id === metric.id);
+        const metricDescription = metricsDescription[metric.id];
 
         // Special handle for new_coverage metric that need to use the complementary
-        if (m.id === 'new_coverage') {
-            metricValue = 1 - m.value;
+        if (config.complementary) {
+            metric.value = 1 - metric.value;
         }
 
-        const radarValue = calculateValue(metricValue, threshold);
+        const radarValue = calculateValue(metric.value, config.thresholds);
 
         return {
-            id: m.id,
+            id: metric.id,
             name: metricDescription.name,
             fullName: metricDescription.fullName,
             description: metricDescription.description,
@@ -23,17 +22,17 @@ const calculateRadarMetrics = (metrics, thresholds) => {
     })
 }
 
-const calculateValue = (value, threshold) => {
-    if (threshold.a.lower_bound <= value && value < threshold.a.upper_bound) {
+const calculateValue = (value, thresholds) => {
+    if (thresholds.a.lower_bound <= value && value < thresholds.a.upper_bound) {
         return 0;
     }
-    else if (threshold.b.lower_bound <= value && value < threshold.b.upper_bound) {
+    else if (thresholds.b.lower_bound <= value && value < thresholds.b.upper_bound) {
         return 1;
     }
-    else if (threshold.c.lower_bound <= value && value < threshold.c.upper_bound) {
+    else if (thresholds.c.lower_bound <= value && value < thresholds.c.upper_bound) {
         return 2;
     }
-    else if (threshold.d.lower_bound <= value && value < threshold.d.upper_bound) {
+    else if (thresholds.d.lower_bound <= value && value < thresholds.d.upper_bound) {
         return 3;
     }
     return 4;

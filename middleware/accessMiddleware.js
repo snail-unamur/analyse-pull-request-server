@@ -5,7 +5,7 @@ const hasAccessToRepo = async (req, res, next) => {
 	try {
 		const token = extractAccessToken(req.headers);
 		const { repoOwner, repoName } = req.params;
-		
+
 		const githubHead = {
 			repoOwner: repoOwner,
 			repoName: repoName,
@@ -17,7 +17,7 @@ const hasAccessToRepo = async (req, res, next) => {
 		if (!hasAccess) {
 			return res.status(403).send('You do not have access to this repository');
 		}
-		
+
 		req.githubHead = githubHead;
 
 		next();

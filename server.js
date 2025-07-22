@@ -1,15 +1,12 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import metricsRoutes from './routes/metricsRoutes.js';
-import settingsRoutes from './routes/settingsRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
-import connectToDB from './config/databaseConfig.js';
 import cookieSession from 'cookie-session';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
 dotenv.config();
-connectToDB();
 
 const app = express();
 app.use(express.json());
@@ -27,7 +24,6 @@ app.use(
 	})
 );
 
-app.use('/api/:repoOwner/:repoName/settings', settingsRoutes);
 app.use('/api/:repoOwner/:repoName/pullRequest', metricsRoutes);
 
 app.use(notFound);
