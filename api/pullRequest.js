@@ -1,4 +1,4 @@
-import askGitHub from "./githubRepoRequest.js";
+import askGitHub from "./githubRequest.js";
 import { logGithub } from "../utils/logger.js";
 
 export const retrieveFileInPR = async (githubHead, prNumber) => {

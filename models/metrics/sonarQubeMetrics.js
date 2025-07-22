@@ -1,4 +1,4 @@
-import askSonarQube from "../../api/sonarqubeRepoRequest.js";
+import askSonarQube from "../../api/sonarqubeRequest.js";
 
 const METRIC_SOURCE = 'SonarQube';
 const METRIC_WITH_PERIODS = ['new_coverage'];

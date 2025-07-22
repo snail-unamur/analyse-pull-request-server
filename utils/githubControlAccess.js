@@ -1,4 +1,4 @@
-import askGitHub from "../api/githubRepoRequest.js";
+import askGitHub from "../api/githubRequest.js";
 import { logGithub } from "./logger.js";
 
 const hasAccessToGitHubRepository = async (githubHead) => {

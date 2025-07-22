@@ -1,4 +1,4 @@
-import askGitHub from "./githubRepoRequest.js"
+import askGitHub from "./githubRequest.js"
 import yaml from 'js-yaml';
 
 const CONFIGURATION_FILENAME = 'improvedConfiguration.yml';

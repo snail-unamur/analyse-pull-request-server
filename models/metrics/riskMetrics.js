@@ -3,12 +3,13 @@ const calculateRiskMetric = (radarMetrics) => {
         return [0, 'A'];
     }
 
-    const total = radarMetrics.reduce((acc, m) => acc + m.radarValue, 0);
+    const worseValue = radarMetrics.reduce(
+        (max, item) => Math.max(max, item.radarValue),
+        -Infinity
+    );
+    const label = getLabelForValue(worseValue);
 
-    const value = Math.floor(total / radarMetrics.length);
-    const label = getLabelForValue(value);
-
-    return [value, label];
+    return [worseValue, label];
 }
 
 const getLabelForValue = (value) => {
