@@ -1,66 +1,68 @@
-export const configuration = [
-    {
-        id: 'complexity',
-        checked: true,
-        complementary: false,
-        thresholds: {
-            a: { lower_bound: 0, upper_bound: 3 },
-            b: { lower_bound: 3, upper_bound: 6 },
-            c: { lower_bound: 6, upper_bound: 9 },
-            d: { lower_bound: 9, upper_bound: 12 },
-            e: { lower_bound: 12, upper_bound: 15 },
-        },
-    },
-    {
-        id: 'cognitive_complexity',
-        checked: true,
-        complementary: false,
-        thresholds: {
-            a: { lower_bound: 0, upper_bound: 3 },
-            b: { lower_bound: 3, upper_bound: 6 },
-            c: { lower_bound: 6, upper_bound: 9 },
-            d: { lower_bound: 9, upper_bound: 12 },
-            e: { lower_bound: 12, upper_bound: 15 },
-        },
-    },
-    {
-        id: 'ncloc',
-        checked: true,
-        complementary: false,
-        thresholds: {
-            a: { lower_bound: 0, upper_bound: 5 },
-            b: { lower_bound: 5, upper_bound: 10 },
-            c: { lower_bound: 10, upper_bound: 20 },
-            d: { lower_bound: 20, upper_bound: 30 },
-            e: { lower_bound: 30, upper_bound: 40 },
-        },
-    },
-    {
-        id: 'instability',
-        checked: true,
-        complementary: false,
-        thresholds: {
-            a: { lower_bound: 0, upper_bound: 0.2 },
-            b: { lower_bound: 0.2, upper_bound: 0.4 },
-            c: { lower_bound: 0.4, upper_bound: 0.6 },
-            d: { lower_bound: 0.6, upper_bound: 0.8 },
-            e: { lower_bound: 0.8, upper_bound: 1 },
-        },
-    },
-    {
-        id: 'new_coverage',
-        checked: true,
-        complementary: true,
-        thresholds: {
-            a: { lower_bound: 0, upper_bound: 0.2 },
-            b: { lower_bound: 0.2, upper_bound: 0.4 },
-            c: { lower_bound: 0.4, upper_bound: 0.6 },
-            d: { lower_bound: 0.6, upper_bound: 0.8 },
-            e: { lower_bound: 0.8, upper_bound: 1 },
-        },
-    },
-];
-
+export const configuration = {
+    analysis_metrics:
+        [
+            {
+                id: 'complexity',
+                checked: true,
+                complementary: false,
+                thresholds: {
+                    a: { lower_bound: 0, upper_bound: 3 },
+                    b: { lower_bound: 3, upper_bound: 6 },
+                    c: { lower_bound: 6, upper_bound: 9 },
+                    d: { lower_bound: 9, upper_bound: 12 },
+                    e: { lower_bound: 12, upper_bound: 15 },
+                },
+            },
+            {
+                id: 'cognitive_complexity',
+                checked: true,
+                complementary: false,
+                thresholds: {
+                    a: { lower_bound: 0, upper_bound: 3 },
+                    b: { lower_bound: 3, upper_bound: 6 },
+                    c: { lower_bound: 6, upper_bound: 9 },
+                    d: { lower_bound: 9, upper_bound: 12 },
+                    e: { lower_bound: 12, upper_bound: 15 },
+                },
+            },
+            {
+                id: 'ncloc',
+                checked: true,
+                complementary: false,
+                thresholds: {
+                    a: { lower_bound: 0, upper_bound: 5 },
+                    b: { lower_bound: 5, upper_bound: 10 },
+                    c: { lower_bound: 10, upper_bound: 20 },
+                    d: { lower_bound: 20, upper_bound: 30 },
+                    e: { lower_bound: 30, upper_bound: 40 },
+                },
+            },
+            {
+                id: 'instability',
+                checked: true,
+                complementary: false,
+                thresholds: {
+                    a: { lower_bound: 0, upper_bound: 0.2 },
+                    b: { lower_bound: 0.2, upper_bound: 0.4 },
+                    c: { lower_bound: 0.4, upper_bound: 0.6 },
+                    d: { lower_bound: 0.6, upper_bound: 0.8 },
+                    e: { lower_bound: 0.8, upper_bound: 1 },
+                },
+            },
+            {
+                id: 'new_coverage',
+                checked: true,
+                complementary: true,
+                thresholds: {
+                    a: { lower_bound: 0, upper_bound: 0.2 },
+                    b: { lower_bound: 0.2, upper_bound: 0.4 },
+                    c: { lower_bound: 0.4, upper_bound: 0.6 },
+                    d: { lower_bound: 0.6, upper_bound: 0.8 },
+                    e: { lower_bound: 0.8, upper_bound: 1 },
+                },
+            },
+        ]
+}
 
 export const sonarMetricsCatA = [
     {

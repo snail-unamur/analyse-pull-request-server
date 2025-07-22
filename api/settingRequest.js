@@ -1,10 +1,13 @@
 import askGitHub from "./githubRequest.js"
 import yaml from 'js-yaml';
+import { logGithub } from "../utils/logger.js";
 
 const CONFIGURATION_FILENAME = 'improvedConfiguration.yml';
 
 const retrieveConfigurationForRepo = async (githubHead) => {
     const url = `contents/${CONFIGURATION_FILENAME}`;
+
+    logGithub(`Retrieving ${githubHead.repoOwner}/${githubHead.repoName} configuration`);
 
     try {
         const response = await askGitHub(githubHead, url);

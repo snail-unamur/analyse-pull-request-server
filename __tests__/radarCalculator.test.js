@@ -1,10 +1,10 @@
 import calculateRadarMetrics from '../models/radarCalculator.js';
-import { metricsCatA, metricsCatB, metricsCatC, metricsCatD, metricsCatE, metricsWorstCase, metricsBestCase, configuration } from '../dataExamples/dataExamples.js';
+import { metricsCatA, metricsCatB, metricsCatC, metricsCatD, metricsCatE, metricsWorstCase, metricsBestCase, configuration } from '../__data__/dataExamples.js';
 
 describe('Testing of the radar calucation ', () => {
 
     test('Category A', () => {
-        const radarMetrics = calculateRadarMetrics(metricsCatA, configuration);
+        const radarMetrics = calculateRadarMetrics(metricsCatA, configuration.analysis_metrics);
 
         radarMetrics.forEach(m => {
             expect(m.radarValue).toBe(0);
@@ -12,7 +12,7 @@ describe('Testing of the radar calucation ', () => {
     })
 
     test('Category B', () => {
-        const radarMetrics = calculateRadarMetrics(metricsCatB, configuration);
+        const radarMetrics = calculateRadarMetrics(metricsCatB, configuration.analysis_metrics);
 
         radarMetrics.forEach(m => {
             expect(m.radarValue).toBe(1);
@@ -20,7 +20,7 @@ describe('Testing of the radar calucation ', () => {
     })
 
     test('Category C', () => {
-        const radarMetrics = calculateRadarMetrics(metricsCatC, configuration);
+        const radarMetrics = calculateRadarMetrics(metricsCatC, configuration.analysis_metrics);
 
         radarMetrics.forEach(m => {
             expect(m.radarValue).toBe(2);
@@ -28,7 +28,7 @@ describe('Testing of the radar calucation ', () => {
     })
 
     test('Category D', () => {
-        const radarMetrics = calculateRadarMetrics(metricsCatD, configuration);
+        const radarMetrics = calculateRadarMetrics(metricsCatD, configuration.analysis_metrics);
 
         radarMetrics.forEach(m => {
             expect(m.radarValue).toBe(3);
@@ -36,7 +36,7 @@ describe('Testing of the radar calucation ', () => {
     })
 
     test('Category E', () => {
-        const radarMetrics = calculateRadarMetrics(metricsCatE, configuration);
+        const radarMetrics = calculateRadarMetrics(metricsCatE, configuration.analysis_metrics);
 
         radarMetrics.forEach(m => {
             expect(m.radarValue).toBe(4);
@@ -44,7 +44,7 @@ describe('Testing of the radar calucation ', () => {
     })
 
     test('Best case', () => {
-        const radarMetrics = calculateRadarMetrics(metricsBestCase, configuration);
+        const radarMetrics = calculateRadarMetrics(metricsBestCase, configuration.analysis_metrics);
 
         radarMetrics.forEach(m => {
             expect(m.radarValue).toBe(0);
@@ -52,7 +52,7 @@ describe('Testing of the radar calucation ', () => {
     })
 
     test('Worst case', () => {
-        const radarMetrics = calculateRadarMetrics(metricsWorstCase, configuration);
+        const radarMetrics = calculateRadarMetrics(metricsWorstCase, configuration.analysis_metrics);
 
         radarMetrics.forEach(m => {
             expect(m.radarValue).toBe(4);
