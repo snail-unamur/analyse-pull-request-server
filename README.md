@@ -83,3 +83,30 @@ To execute the unit tests, run:
 ```bash
 npm test
 ```
+
+## 🏢 Architecture
+
+The entry point of the server is [`server.js`](./server.js). This file initializes the server and registers all the API routes.
+
+The server is organized into the following folders:
+
+- **`routes/`** Defines the API endpoints, including HTTP methods and the middleware stack for each route.
+
+- **`controllers/`** Implements the functions associated with each route. Controllers handle the transformation of incoming requests into appropriate responses.
+
+- **`models/`** Contains the core business logic of the application, including the retrieval and calculation of metrics.
+
+- **`middleware/`** Defines middleware functions used to process data or enforce rules as requests pass through the server.
+
+- **`api/`** Contains helper functions to interact with external services where metrics are sourced (e.g. GitHub, SonarCloud).
+
+- **`utils/`** Provides utility functions shared across the codebase.
+
+- **`__tests__/`** Includes unit tests for the server components.
+
+- **`__data__/`** Stores mock or sample data used during testing.
+
+- **`__templates__/`** Contains template files required to set up repositories for analysis.
+
+
+TODO: Talk about how to configure metric parameter
