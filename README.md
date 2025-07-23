@@ -47,6 +47,8 @@ For each metric, you can:
 
 Modify this file to tailor the analysis to your project's specific needs.
 
+At the root of the server, the `metricsDescription.json` file defines all the textual descriptions of the metrics used by the server. You can modify the `name`, `full_name`, or `description` fields to provide more accurate or project-specific information.
+
 
 ## ▶️ Run the server
 
