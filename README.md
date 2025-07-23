@@ -18,7 +18,7 @@ Once the server has been cloned, follow these steps to complete the installation
 
     Create an access token in SonarCloud and add it to the .env file:
     ```
-    SONARQUBE_CLOUD_TOKEN=<your-sonarcloud-token>
+    SONAR_TOKEN=<your-sonar-token>
     ```
 
 ## 🛠 Repository configuration
@@ -36,13 +36,16 @@ Before the server can analyze pull requests, the target repository must be confi
 
 ## 📊 Metric Configuration
 
-The `improvedConfiguration.yml` file, copied in the previous step, serves as the configuration file for the repository.  It defines all available metrics.
+The `improvedConfiguration.yml` file, which you copied to the root folder of the analyzed repository in the previous step, serves as the configuration file for the metrics. It defines all available metrics and their settings.
 
-You can:
-- ✅ Enable or disable a metric  
-- 🎯 Adjust threshold values used in the radar chart  
+For each metric, you can:
 
-Modify this file to tailor the analysis to your project's needs.
+- ✅ **Enable or disable** the metric using the `checked` field  
+- 🔄 **Change the source** from which the metric is retrieved using the `source` field  
+- 🎯 **Adjust threshold values** used to compute the radar chart via the `thresholds` field. Thresholds range from 'a' (center value) to 'e' (outer value)  
+- 🔁 **Specify if the metric should be complemented** using the `complementary` field. For example, for a metric like 'new coverage', where a higher percentage is better, the complementary value is used to reflect this
+
+Modify this file to tailor the analysis to your project's specific needs.
 
 
 ## ▶️ Run the server
@@ -107,6 +110,3 @@ The server is organized into the following folders:
 - **`__data__/`** Stores mock or sample data used during testing.
 
 - **`__templates__/`** Contains template files required to set up repositories for analysis.
-
-
-TODO: Talk about how to configure metric parameter

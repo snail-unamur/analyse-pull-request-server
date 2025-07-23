@@ -1,4 +1,4 @@
-import retrieveSonarQubeMetrics from './metrics/sonarQubeMetrics.js';
+import retrieveSonarMetrics from './metrics/sonarMetrics.js';
 import retrieveCodeQLMetrics from './metrics/codeQLMetrics.js';
 import calculateRiskMetric from './metrics/riskMetrics.js';
 import calculateRadarMetrics from './radarCalculator.js';
@@ -10,14 +10,14 @@ export const calculate = async (githubHead, configuration, prNumber) => {
 
     log('Fetching metrics', prNumber);
 
-    const [sonarqubeMetrics, codeQLMetrics] = await Promise.all([
-        retrieveSonarQubeMetrics(githubHead, enabledMetricsConfig, prNumber),
+    const [sonarMetrics, codeQLMetrics] = await Promise.all([
+        retrieveSonarMetrics(githubHead, enabledMetricsConfig, prNumber),
         retrieveCodeQLMetrics(githubHead, enabledMetricsConfig, prNumber)
     ]);
 
     log('All metrics retrieved', prNumber);
 
-    const calculatedMetrics = [...sonarqubeMetrics, ...codeQLMetrics];
+    const calculatedMetrics = [...sonarMetrics, ...codeQLMetrics];
 
     const radarMetrics = calculateRadarMetrics(calculatedMetrics, enabledMetricsConfig);
     const [riskValue, riskCategory] = calculateRiskMetric(radarMetrics);

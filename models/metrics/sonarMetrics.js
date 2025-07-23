@@ -1,9 +1,9 @@
-import askSonarQube from "../../api/sonarqubeRequest.js";
+import askSonar from "../../api/sonarRequest.js";
 
-const METRIC_SOURCE = 'SonarQube';
+const METRIC_SOURCE = 'Sonar';
 const METRIC_WITH_PERIODS = ['new_coverage'];
 
-const retrieveSonarQubeMetrics = async (githubHead, metrics, prNumber) => {
+const retrieveSonarMetrics = async (githubHead, metrics, prNumber) => {
     const sonarMetrics = metrics.filter(metric => metric.source === METRIC_SOURCE);
     if (!sonarMetrics) {
         return [];
@@ -12,7 +12,7 @@ const retrieveSonarQubeMetrics = async (githubHead, metrics, prNumber) => {
     const projectKey = `${githubHead.repoOwner}_${githubHead.repoName}`;
     const metricsQuery = sonarMetrics.map(metric => metric.id).join('%2C');
 
-    const response = await askSonarQube(projectKey, prNumber, metricsQuery);
+    const response = await askSonar(projectKey, prNumber, metricsQuery);
     const data = await response.json();
 
     return data.component.measures.map(measure => {
@@ -31,4 +31,4 @@ const retrieveSonarQubeMetrics = async (githubHead, metrics, prNumber) => {
     });
 }
 
-export default retrieveSonarQubeMetrics;
+export default retrieveSonarMetrics;

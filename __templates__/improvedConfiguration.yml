@@ -1,7 +1,7 @@
 analysis_metrics:
   - id: complexity
     checked: true
-    source: SonarQube
+    source: Sonar
     complementary: false
     thresholds:
       a:
@@ -22,7 +22,7 @@ analysis_metrics:
 
   - id: cognitive_complexity
     checked: true
-    source: SonarQube
+    source: Sonar
     complementary: false
     thresholds:
       a:
@@ -43,7 +43,7 @@ analysis_metrics:
 
   - id: ncloc
     checked: true
-    source: SonarQube
+    source: Sonar
     complementary: false
     thresholds:
       a:
@@ -61,6 +61,27 @@ analysis_metrics:
       e:
         lower_bound: 30
         upper_bound: 40  # Upper limit is +40
+
+  - id: new_coverage
+    checked: true
+    source: Sonar
+    complementary: true
+    thresholds:
+      a:
+        lower_bound: 0
+        upper_bound: 0.2
+      b:
+        lower_bound: 0.2
+        upper_bound: 0.4
+      c:
+        lower_bound: 0.4
+        upper_bound: 0.6
+      d:
+        lower_bound: 0.6
+        upper_bound: 0.8
+      e:
+        lower_bound: 0.8
+        upper_bound: 1  # Upper limit is 100%
 
   - id: instability
     checked: true
@@ -83,23 +104,3 @@ analysis_metrics:
         lower_bound: 0.8
         upper_bound: 1  # Upper limit is 100%
 
-  - id: new_coverage
-    checked: true
-    source: SonarQube
-    complementary: true
-    thresholds:
-      a:
-        lower_bound: 0
-        upper_bound: 0.2
-      b:
-        lower_bound: 0.2
-        upper_bound: 0.4
-      c:
-        lower_bound: 0.4
-        upper_bound: 0.6
-      d:
-        lower_bound: 0.6
-        upper_bound: 0.8
-      e:
-        lower_bound: 0.8
-        upper_bound: 1  # Upper limit is 100%
