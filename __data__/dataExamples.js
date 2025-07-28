@@ -1,10 +1,19 @@
 export const configuration = {
-    analysis_metrics:
-        [
+    analysis_metrics: {
+        default: [
+            {
+                id: 'ncloc',
+                checked: true,
+            },
+            {
+                id: 'new_coverage',
+                checked: true,
+            }
+        ],
+        radar: [
             {
                 id: 'complexity',
                 checked: true,
-                complementary: false,
                 thresholds: {
                     a: { lower_bound: 0, upper_bound: 3 },
                     b: { lower_bound: 3, upper_bound: 6 },
@@ -16,7 +25,6 @@ export const configuration = {
             {
                 id: 'cognitive_complexity',
                 checked: true,
-                complementary: false,
                 thresholds: {
                     a: { lower_bound: 0, upper_bound: 3 },
                     b: { lower_bound: 3, upper_bound: 6 },
@@ -26,21 +34,8 @@ export const configuration = {
                 },
             },
             {
-                id: 'ncloc',
-                checked: true,
-                complementary: false,
-                thresholds: {
-                    a: { lower_bound: 0, upper_bound: 5 },
-                    b: { lower_bound: 5, upper_bound: 10 },
-                    c: { lower_bound: 10, upper_bound: 20 },
-                    d: { lower_bound: 20, upper_bound: 30 },
-                    e: { lower_bound: 30, upper_bound: 40 },
-                },
-            },
-            {
                 id: 'instability',
                 checked: true,
-                complementary: false,
                 thresholds: {
                     a: { lower_bound: 0, upper_bound: 0.2 },
                     b: { lower_bound: 0.2, upper_bound: 0.4 },
@@ -48,38 +43,31 @@ export const configuration = {
                     d: { lower_bound: 0.6, upper_bound: 0.8 },
                     e: { lower_bound: 0.8, upper_bound: 1 },
                 },
-            },
-            {
-                id: 'new_coverage',
-                checked: true,
-                complementary: true,
-                thresholds: {
-                    a: { lower_bound: 0, upper_bound: 0.2 },
-                    b: { lower_bound: 0.2, upper_bound: 0.4 },
-                    c: { lower_bound: 0.4, upper_bound: 0.6 },
-                    d: { lower_bound: 0.6, upper_bound: 0.8 },
-                    e: { lower_bound: 0.8, upper_bound: 1 },
-                },
-            },
+            }
         ]
+    }
 }
 
 export const sonarMetricsCatA = [
     {
         id: 'complexity',
         value: 2,
+        default: false
     },
     {
         id: 'cognitive_complexity',
         value: 2,
+        default: false
     },
     {
         id: 'ncloc',
         value: 2,
+        default: true
     },
     {
         id: 'new_coverage',
         value: 0.9,
+        default: true
     }
 ];
 
@@ -87,6 +75,7 @@ export const codeqlMetricsCatA = [
     {
         id: 'instability',
         value: 0.1,
+        default: false
     },
 ];
 
@@ -96,18 +85,22 @@ export const sonarMetricsCatB = [
     {
         id: 'complexity',
         value: 4,
+        default: false
     },
     {
         id: 'cognitive_complexity',
         value: 4,
+        default: false
     },
     {
         id: 'ncloc',
         value: 7,
+        default: true
     },
     {
         id: 'new_coverage',
         value: 0.7,
+        default: true
     }
 ];
 
@@ -115,6 +108,7 @@ export const codeqlMetricsCatB = [
     {
         id: 'instability',
         value: 0.3,
+        default: false
     },
 ];
 
@@ -124,18 +118,22 @@ export const sonarMetricsCatC = [
     {
         id: 'complexity',
         value: 7,
+        default: false
     },
     {
         id: 'cognitive_complexity',
         value: 7,
+        default: false
     },
     {
         id: 'ncloc',
         value: 15,
+        default: true
     },
     {
         id: 'new_coverage',
         value: 0.5,
+        default: true
     }
 ];
 
@@ -143,6 +141,7 @@ export const codeqlMetricsCatC = [
     {
         id: 'instability',
         value: 0.5,
+        default: false
     },
 ];
 
@@ -152,19 +151,22 @@ export const sonarMetricsCatD = [
     {
         id: 'complexity',
         value: 10,
-
+        default: false
     },
     {
         id: 'cognitive_complexity',
         value: 10,
+        default: false
     },
     {
         id: 'ncloc',
         value: 25,
+        default: true
     },
     {
         id: 'new_coverage',
         value: 0.3,
+        default: true
     }
 ];
 
@@ -172,6 +174,7 @@ export const codeqlMetricsCatD = [
     {
         id: 'instability',
         value: 0.7,
+        default: false
     },
 ];
 
@@ -181,18 +184,22 @@ export const sonarMetricsCatE = [
     {
         id: 'complexity',
         value: 20,
+        default: false
     },
     {
         id: 'cognitive_complexity',
         value: 20,
+        default: false
     },
     {
         id: 'ncloc',
         value: 35,
+        default: true
     },
     {
         id: 'new_coverage',
         value: 0.1,
+        default: true
     }
 ];
 
@@ -200,6 +207,7 @@ export const codeqlMetricsCatE = [
     {
         id: 'instability',
         value: 0.9,
+        default: false
     },
 ];
 
@@ -209,18 +217,22 @@ export const sonarMetricsWorstCase = [
     {
         id: 'complexity',
         value: 100,
+        default: false
     },
     {
         id: 'cognitive_complexity',
         value: 100,
+        default: false
     },
     {
         id: 'ncloc',
         value: 100,
+        default: true
     },
     {
         id: 'new_coverage',
         value: 0.0,
+        default: true
     }
 ];
 
@@ -228,6 +240,7 @@ export const codeqlMetricsWorstCase = [
     {
         id: 'instability',
         value: 1.0,
+        default: false
     },
 ];
 
@@ -237,18 +250,22 @@ export const sonarMetricsBestCase = [
     {
         id: 'complexity',
         value: 0,
+        default: false
     },
     {
         id: 'cognitive_complexity',
         value: 0,
+        default: false
     },
     {
         id: 'ncloc',
         value: 0,
+        default: true
     },
     {
         id: 'new_coverage',
         value: 1.0,
+        default: true
     }
 ];
 
@@ -256,6 +273,7 @@ export const codeqlMetricsBestCase = [
     {
         id: 'instability',
         value: 0.0,
+        default: false
     },
 ];
 

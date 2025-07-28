@@ -33,7 +33,7 @@ describe('Testing of the global calculation of metrics', () => {
     const radarMetrics = await calculate(null, configuration, 1);
 
     radarMetrics.radarMetrics.forEach(m => {
-      expect(m.radarValue).toBe(0);
+      expect(m.value).toBe(0);
     })
 
     expect(radarMetrics.riskValue).toBe(0);
@@ -47,7 +47,7 @@ describe('Testing of the global calculation of metrics', () => {
     const radarMetrics = await calculate(null, configuration, 1);
 
     radarMetrics.radarMetrics.forEach(m => {
-      expect(m.radarValue).toBe(1);
+      expect(m.value).toBe(1);
     })
 
     expect(radarMetrics.riskValue).toBe(1);
@@ -61,7 +61,7 @@ describe('Testing of the global calculation of metrics', () => {
     const radarMetrics = await calculate(null, configuration, 1);
 
     radarMetrics.radarMetrics.forEach(m => {
-      expect(m.radarValue).toBe(2);
+      expect(m.value).toBe(2);
     })
 
     expect(radarMetrics.riskValue).toBe(2);
@@ -75,7 +75,7 @@ describe('Testing of the global calculation of metrics', () => {
     const radarMetrics = await calculate(null, configuration, 1);
 
     radarMetrics.radarMetrics.forEach(m => {
-      expect(m.radarValue).toBe(3);
+      expect(m.value).toBe(3);
     })
 
     expect(radarMetrics.riskValue).toBe(3);
@@ -89,7 +89,7 @@ describe('Testing of the global calculation of metrics', () => {
     const radarMetrics = await calculate(null, configuration, 1);
 
     radarMetrics.radarMetrics.forEach(m => {
-      expect(m.radarValue).toBe(4);
+      expect(m.value).toBe(4);
     })
 
     expect(radarMetrics.riskValue).toBe(4);

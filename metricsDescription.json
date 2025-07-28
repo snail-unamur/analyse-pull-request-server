@@ -23,5 +23,10 @@
         "name": "Coverage",
         "fullName": "New Line Coverage",
         "description": "A mix of line coverage and condition coverage on new lines."
+    },
+    "files": {
+        "name": "files",
+        "fullName": "Modified files",
+        "description": "The number of modified files."
     }
 }

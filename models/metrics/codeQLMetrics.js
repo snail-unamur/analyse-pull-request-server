@@ -1,8 +1,8 @@
 import retrieveCodeQLArtifact from "../../api/codeQLRequest.js";
 import { retrieveFileInPR } from "../../api/pullRequest.js";
 
-const AFFERENT_COUPLING_METRIC_ID = 'afferent-coupling';
-const EFFERENT_COUPLING_METRIC_ID = 'efferent-coupling';
+export const AFFERENT_COUPLING_METRIC_ID = 'afferent-coupling';
+export const EFFERENT_COUPLING_METRIC_ID = 'efferent-coupling';
 const METRIC_SOURCE = 'CodeQL';
 
 const retrieveCodeQLMetrics = async (githubHead, metrics, prNumber) => {
@@ -23,11 +23,12 @@ const retrieveCodeQLMetrics = async (githubHead, metrics, prNumber) => {
 
     return [{
         id: codeQLMetrics[0].id,
-        value: meanInstability
+        value: meanInstability,
+        default: codeQLMetrics[0].thresholds === undefined
     }];
 }
 
-const extractMetricsFromArtifact = (codeQLArtefact) => {
+export const extractMetricsFromArtifact = (codeQLArtefact) => {
     const allMetrics = codeQLArtefact.runs[0].properties.metricResults;
 
     const afferentMetric = allMetrics.filter(m => m.ruleId.includes(AFFERENT_COUPLING_METRIC_ID));
@@ -40,19 +41,18 @@ const extractMetricsFromArtifact = (codeQLArtefact) => {
     }));
 }
 
-const calculateMeanInstability = (metrics) => {
+export const calculateMeanInstability = (metrics) => {
     const instabilityArray = metrics.map(metric => calculateInstabilityMetric(metric));
     const totalInstability = instabilityArray.reduce((acc, i) => acc + i, 0);
 
     return parseFloat((totalInstability / instabilityArray.length).toFixed(2));
 }
 
-const calculateInstabilityMetric = (metric) => {
+export const calculateInstabilityMetric = (metric) => {
     const efferent = parseFloat(metric.efferent) || 0;
     const afferent = parseFloat(metric.afferent) || 0;
     const total = efferent + afferent;
-
-    return total === 0 ? 0 : efferent / total;
+    return total === 0 ? 0 : parseFloat((efferent / total).toFixed(2));
 }
 
 export default retrieveCodeQLMetrics;

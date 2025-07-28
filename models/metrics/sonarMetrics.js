@@ -27,6 +27,7 @@ const retrieveSonarMetrics = async (githubHead, metrics, prNumber) => {
         return {
             id: metric.id,
             value: parseFloat(value),
+            default: metric.thresholds === undefined
         };
     });
 }

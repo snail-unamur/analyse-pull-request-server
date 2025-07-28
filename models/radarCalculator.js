@@ -16,7 +16,7 @@ const calculateRadarMetrics = (metrics, metricsConfig) => {
             name: metricDescription.name,
             fullName: metricDescription.fullName,
             description: metricDescription.description,
-            radarValue: radarValue
+            value: radarValue
         }
     })
 }

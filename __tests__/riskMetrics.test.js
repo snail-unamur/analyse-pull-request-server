@@ -3,11 +3,11 @@ import calculateRiskMetric from '../models/metrics/riskMetrics';
 describe('Testing of the calculations of the risk metric (max value, integer 0-4)', () => {
     test('Base case', () => {
         const metrics = [
-            { radarValue: 0 },
-            { radarValue: 1 },
-            { radarValue: 2 },
-            { radarValue: 3 },
-            { radarValue: 4 },
+            { value: 0 },
+            { value: 1 },
+            { value: 2 },
+            { value: 3 },
+            { value: 4 },
         ];
         const [value, category] = calculateRiskMetric(metrics);
 
@@ -16,7 +16,7 @@ describe('Testing of the calculations of the risk metric (max value, integer 0-4
     });
 
     test('One metric', () => {
-        const metrics = [{ radarValue: 2 }];
+        const metrics = [{ value: 2 }];
         const [value, category] = calculateRiskMetric(metrics);
 
         expect(value).toBe(2);

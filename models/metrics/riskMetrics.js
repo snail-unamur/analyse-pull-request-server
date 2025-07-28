@@ -4,7 +4,7 @@ const calculateRiskMetric = (radarMetrics) => {
     }
 
     const worseValue = radarMetrics.reduce(
-        (max, item) => Math.max(max, item.radarValue),
+        (max, item) => Math.max(max, item.value),
         -Infinity
     );
     const label = getLabelForValue(worseValue);
