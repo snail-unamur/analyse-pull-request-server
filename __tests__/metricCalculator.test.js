@@ -37,7 +37,6 @@ describe('Testing of the global calculation of metrics', () => {
     })
 
     expect(radarMetrics.riskValue).toBe(0);
-    expect(radarMetrics.riskCategory).toBe('A');
   });
 
   test('Category B', async () => {
@@ -50,8 +49,7 @@ describe('Testing of the global calculation of metrics', () => {
       expect(m.value).toBe(1);
     })
 
-    expect(radarMetrics.riskValue).toBe(1);
-    expect(radarMetrics.riskCategory).toBe('B');
+    expect(radarMetrics.riskValue).toBe(38.97114317029975);
   });
 
   test('Category C', async () => {
@@ -64,8 +62,7 @@ describe('Testing of the global calculation of metrics', () => {
       expect(m.value).toBe(2);
     })
 
-    expect(radarMetrics.riskValue).toBe(2);
-    expect(radarMetrics.riskCategory).toBe('C');
+    expect(radarMetrics.riskValue).toBe(467.65371804359694);
   });
 
   test('Category D', async () => {
@@ -78,8 +75,7 @@ describe('Testing of the global calculation of metrics', () => {
       expect(m.value).toBe(3);
     })
 
-    expect(radarMetrics.riskValue).toBe(3);
-    expect(radarMetrics.riskCategory).toBe('D');
+    expect(radarMetrics.riskValue).toBe(2922.835737772481);
   });
 
   test('Category E', async () => {
@@ -92,8 +88,7 @@ describe('Testing of the global calculation of metrics', () => {
       expect(m.value).toBe(4);
     })
 
-    expect(radarMetrics.riskValue).toBe(4);
-    expect(radarMetrics.riskCategory).toBe('E');
+    expect(radarMetrics.riskValue).toBe(21823.840175367855);
   });
 
   test('Empty metric', async () => {
@@ -103,6 +98,5 @@ describe('Testing of the global calculation of metrics', () => {
     const radarMetrics = await calculate(null, configuration, 1);
 
     expect(radarMetrics.riskValue).toBe(0);
-    expect(radarMetrics.riskCategory).toBe('A');
   });
 });

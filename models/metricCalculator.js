@@ -27,14 +27,13 @@ export const calculate = async (githubHead, configuration, prNumber) => {
     const radarCalculatedMetrics = calculatedMetrics.filter(m => !m.default);
 
     const radarMetricThresholds = calculateRadarMetrics(radarCalculatedMetrics, enabledMetricsConfig);
-    const [riskValue, riskCategory] = calculateRiskMetric(radarMetricThresholds);
+    const riskValue = calculateRiskMetric(defaultCalculatedMetrics, radarMetricThresholds);
 
     return {
         prNumber: prNumber,
         radarMetrics: radarMetricThresholds,
         defaultMetrics: defaultCalculatedMetrics,
         riskValue: riskValue,
-        riskCategory: riskCategory
     };
 }
 

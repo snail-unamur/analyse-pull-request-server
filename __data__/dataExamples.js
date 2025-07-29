@@ -8,6 +8,10 @@ export const configuration = {
             {
                 id: 'new_coverage',
                 checked: true,
+            },
+            {
+                id: 'files',
+                checked: true,
             }
         ],
         radar: [
@@ -68,6 +72,11 @@ export const sonarMetricsCatA = [
         id: 'new_coverage',
         value: 0.9,
         default: true
+    },
+    {
+        id: 'files',
+        value: 3,
+        default: true
     }
 ];
 
@@ -100,6 +109,11 @@ export const sonarMetricsCatB = [
     {
         id: 'new_coverage',
         value: 0.7,
+        default: true
+    },
+    {
+        id: 'files',
+        value: 3,
         default: true
     }
 ];
@@ -134,6 +148,11 @@ export const sonarMetricsCatC = [
         id: 'new_coverage',
         value: 0.5,
         default: true
+    },
+    {
+        id: 'files',
+        value: 3,
+        default: true
     }
 ];
 
@@ -166,6 +185,11 @@ export const sonarMetricsCatD = [
     {
         id: 'new_coverage',
         value: 0.3,
+        default: true
+    },
+    {
+        id: 'files',
+        value: 3,
         default: true
     }
 ];
@@ -200,6 +224,11 @@ export const sonarMetricsCatE = [
         id: 'new_coverage',
         value: 0.1,
         default: true
+    },
+    {
+        id: 'files',
+        value: 3,
+        default: true
     }
 ];
 
@@ -233,6 +262,11 @@ export const sonarMetricsWorstCase = [
         id: 'new_coverage',
         value: 0.0,
         default: true
+    },
+    {
+        id: 'files',
+        value: 3,
+        default: true
     }
 ];
 
@@ -265,6 +299,11 @@ export const sonarMetricsBestCase = [
     {
         id: 'new_coverage',
         value: 1.0,
+        default: true
+    },
+    {
+        id: 'files',
+        value: 3,
         default: true
     }
 ];
