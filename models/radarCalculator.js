@@ -4,11 +4,7 @@ const calculateRadarMetrics = (metrics, metricsConfig) => {
     return metrics.map(metric => {
         const config = metricsConfig.find(m => m.id === metric.id);
         const metricDescription = metricsDescription[metric.id];
-
-        if (config.complementary) {
-            metric.value = 1 - metric.value;
-        }
-
+        
         const radarValue = calculateValue(metric.value, config.thresholds);
 
         return {
