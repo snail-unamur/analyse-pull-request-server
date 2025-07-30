@@ -31,7 +31,7 @@ Before the server can analyze pull requests, the target repository must be confi
     
 2. In SonarCloud:
     - Register a new project for your repository.
-    - Follow the setup instructions provided by SonarCloud.
+    - Follow the setup instructions provided by SonarCloud, setting up the analysis with GitHub CI/CD.
     - Update the CI/CD workflow if necessary, but do not change the project key. The server expects the default format: *"repo-owner_repo-name"*
 
 ## 📊 Metric Configuration
