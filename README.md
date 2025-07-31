@@ -31,19 +31,18 @@ Before the server can analyze pull requests, the target repository must be confi
     
 2. In SonarCloud:
     - Register a new project for your repository.
-    - Follow the setup instructions provided by SonarCloud, setting up the analysis with GitHub CI/CD.
-    - Update the CI/CD workflow if necessary, but do not change the project key. The server expects the default format: *"repo-owner_repo-name"*
+    - Follow the setup instructions provided by SonarCloud, select 'with GitHub Actions' for the analysis method and choose the right language.
+    - Update the CI/CD workflow file ```.github/workflows/sonar.yml``` if necessary, but do not change the project key. The server expects the default format: *"repo-owner_repo-name"*
 
 ## 📊 Metric Configuration
 
-The `improvedConfiguration.yml` file, which you copied to the root folder of the analyzed repository in the previous step, serves as the configuration file for the metrics. It defines all available metrics and their settings.
+The `improvedConfiguration.yml` file, which you copied to the root folder of the target repository in the previous step, serves as the configuration file for the metrics. It defines all available metrics and their settings.
 
 For each metric, you can:
 
 - ✅ **Enable or disable** the metric using the `checked` field  
 - 🔄 **Change the source** from which the metric is retrieved using the `source` field  
 - 🎯 **Adjust threshold values** used to compute the radar chart via the `thresholds` field. Thresholds range from 'a' (center value) to 'e' (outer value)  
-- 🔁 **Specify if the metric should be complemented** using the `complementary` field. For example, for a metric like 'new coverage', where a higher percentage is better, the complementary value is used to reflect this
 
 Modify this file to tailor the analysis to your project's specific needs.
 
