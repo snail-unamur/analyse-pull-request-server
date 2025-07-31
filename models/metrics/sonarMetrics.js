@@ -1,7 +1,7 @@
 import askSonar from "../../api/sonarRequest.js";
 
 const METRIC_SOURCE = 'Sonar';
-const METRIC_WITH_PERIODS = ['new_coverage'];
+const METRIC_WITH_PERIODS = ['new_coverage','new_lines'];
 
 const retrieveSonarMetrics = async (githubHead, metrics, prNumber) => {
     const sonarMetrics = metrics.filter(metric => metric.source === METRIC_SOURCE);

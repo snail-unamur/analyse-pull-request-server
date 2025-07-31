@@ -1,6 +1,6 @@
 analysis_metrics:
   default:
-    - id: ncloc
+    - id: new_lines
       source: Sonar
       
     - id: new_coverage

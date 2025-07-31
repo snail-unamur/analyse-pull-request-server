@@ -9,9 +9,9 @@
         "fullName": "Cognitive Complexity",
         "description": "A qualification of how hard it is to understand the code's control flow."
     },
-    "ncloc": {
+    "new_lines": {
         "name": "Loc",
-        "fullName": "Lines of Code",
+        "fullName": "New Lines of Code",
         "description": "The number of physical lines that contain at least one character."
     },
     "instability": {
