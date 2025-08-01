@@ -33,10 +33,10 @@ describe('Testing of the global calculation of metrics', () => {
     const radarMetrics = await calculate(null, configuration, 1);
 
     radarMetrics.radarMetrics.forEach(m => {
-      expect(m.value).toBe(0);
+      expect(m .radarValue).toBe(0);
     })
 
-    expect(radarMetrics.riskValue).toBe(0);
+    expect(radarMetrics.riskValue).toBe(13);
   });
 
   test('Category B', async () => {
@@ -46,10 +46,10 @@ describe('Testing of the global calculation of metrics', () => {
     const radarMetrics = await calculate(null, configuration, 1);
 
     radarMetrics.radarMetrics.forEach(m => {
-      expect(m.value).toBe(1);
+      expect(m .radarValue).toBe(1);
     })
 
-    expect(radarMetrics.riskValue).toBe(38.97114317029975);
+    expect(radarMetrics.riskValue).toBe(239);
   });
 
   test('Category C', async () => {
@@ -59,10 +59,10 @@ describe('Testing of the global calculation of metrics', () => {
     const radarMetrics = await calculate(null, configuration, 1);
 
     radarMetrics.radarMetrics.forEach(m => {
-      expect(m.value).toBe(2);
+      expect(m .radarValue).toBe(2);
     })
 
-    expect(radarMetrics.riskValue).toBe(467.65371804359694);
+    expect(radarMetrics.riskValue).toBe(2182);
   });
 
   test('Category D', async () => {
@@ -72,10 +72,10 @@ describe('Testing of the global calculation of metrics', () => {
     const radarMetrics = await calculate(null, configuration, 1);
 
     radarMetrics.radarMetrics.forEach(m => {
-      expect(m.value).toBe(3);
+      expect(m .radarValue).toBe(3);
     })
 
-    expect(radarMetrics.riskValue).toBe(2922.835737772481);
+    expect(radarMetrics.riskValue).toBe(12341);
   });
 
   test('Category E', async () => {
@@ -85,10 +85,10 @@ describe('Testing of the global calculation of metrics', () => {
     const radarMetrics = await calculate(null, configuration, 1);
 
     radarMetrics.radarMetrics.forEach(m => {
-      expect(m.value).toBe(4);
+      expect(m .radarValue).toBe(4);
     })
 
-    expect(radarMetrics.riskValue).toBe(21823.840175367855);
+    expect(radarMetrics.riskValue).toBe(198233);
   });
 
   test('Empty metric', async () => {

@@ -8,7 +8,7 @@ describe('Testing of the radar calucation ', () => {
         const radarMetrics = calculateRadarMetrics(calculatedMetrics, configuration.analysis_metrics.radar);
 
         radarMetrics.forEach(m => {
-            expect(m.value).toBe(0);
+            expect(m. radarValue).toBe(0);
         })
     })
 
@@ -17,7 +17,7 @@ describe('Testing of the radar calucation ', () => {
         const radarMetrics = calculateRadarMetrics(calculatedMetrics, configuration.analysis_metrics.radar);
 
         radarMetrics.forEach(m => {
-            expect(m.value).toBe(1);
+            expect(m. radarValue).toBe(1);
         })
     })
 
@@ -26,7 +26,7 @@ describe('Testing of the radar calucation ', () => {
         const radarMetrics = calculateRadarMetrics(calculatedMetrics, configuration.analysis_metrics.radar);
 
         radarMetrics.forEach(m => {
-            expect(m.value).toBe(2);
+            expect(m. radarValue).toBe(2);
         })
     })
 
@@ -35,7 +35,7 @@ describe('Testing of the radar calucation ', () => {
         const radarMetrics = calculateRadarMetrics(calculatedMetrics, configuration.analysis_metrics.radar);
 
         radarMetrics.forEach(m => {
-            expect(m.value).toBe(3);
+            expect(m. radarValue).toBe(3);
         })
     })
 
@@ -44,7 +44,7 @@ describe('Testing of the radar calucation ', () => {
         const radarMetrics = calculateRadarMetrics(calculatedMetrics, configuration.analysis_metrics.radar);
 
         radarMetrics.forEach(m => {
-            expect(m.value).toBe(4);
+            expect(m. radarValue).toBe(4);
         })
     })
 
@@ -53,7 +53,7 @@ describe('Testing of the radar calucation ', () => {
         const radarMetrics = calculateRadarMetrics(calculatedMetrics, configuration.analysis_metrics.radar);
 
         radarMetrics.forEach(m => {
-            expect(m.value).toBe(0);
+            expect(m. radarValue).toBe(0);
         })
     })
 
@@ -62,7 +62,7 @@ describe('Testing of the radar calucation ', () => {
         const radarMetrics = calculateRadarMetrics(calculatedMetrics, configuration.analysis_metrics.radar);
 
         radarMetrics.forEach(m => {
-            expect(m.value).toBe(4);
+            expect(m. radarValue).toBe(4);
         })
     })
 })

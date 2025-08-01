@@ -28,7 +28,7 @@ const retrieveSonarMetrics = async (githubHead, metrics, prNumber) => {
         }
 
         if (METRIC_DEVIDED_BY_FILE.includes(measure.metric)) {
-            value = value / nbFiles;
+            value = Math.round(value / nbFiles);
         }
 
         return {

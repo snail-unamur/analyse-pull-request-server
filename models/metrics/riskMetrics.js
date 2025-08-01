@@ -10,7 +10,8 @@ const calculateRiskMetric = (defaultMetrics, radarMetrics) => {
     const lineFactor = defaultMetrics.find(m => m.id === 'ncloc')?.value || 1;
     const coverage = defaultMetrics.find(m => m.id === 'new_coverage')?.value || 1;
 
-    return area / ((1 / fileFactor) * (1 / lineFactor) * coverage);
+    const rawValue = area / ((1 / fileFactor) * (1 / lineFactor) * coverage);
+    return Math.round(rawValue);
 }
 
 const polarToCartesian = (axes) => {

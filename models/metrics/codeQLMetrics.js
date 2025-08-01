@@ -28,7 +28,11 @@ const retrieveCodeQLMetrics = async (githubHead, metricConfigs, prNumber) => {
 
         const rawMetrics = strategy.extract(artifact);
         const filteredMetrics = strategy.filter(rawMetrics, modifiedFilesInPr);
-        const value = strategy.aggregate(filteredMetrics);
+        let value = strategy.aggregate(filteredMetrics);
+
+        if (isNaN(value)) {
+            value = 0;
+        }
 
         return {
             id: strategy.id,

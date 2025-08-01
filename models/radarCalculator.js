@@ -12,16 +12,13 @@ const calculateRadarMetrics = (metrics, metricsConfig) => {
             name: metricDescription.name,
             fullName: metricDescription.fullName,
             description: metricDescription.description,
-            value: radarValue
+            radarValue: radarValue,
+            value: metric.value
         }
     })
 }
 
 const calculateValue = (value, thresholds) => {
-    if (isNaN(value)) {
-        return 0;
-    }
-
     if (thresholds.a.lower_bound <= value && value < thresholds.a.upper_bound) {
         return 0;
     }

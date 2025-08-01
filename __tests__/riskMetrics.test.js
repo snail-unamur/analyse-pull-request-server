@@ -70,7 +70,7 @@ describe('calculateRiskMetric', () => {
         ];
 
         const result = calculateRiskMetric(defaultMetrics, radarMetrics);
-        expect(result).toBeCloseTo(1.3, 1);
+        expect(result).toBeCloseTo(1, 1);
     });
 
 });
