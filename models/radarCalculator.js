@@ -18,6 +18,10 @@ const calculateRadarMetrics = (metrics, metricsConfig) => {
 }
 
 const calculateValue = (value, thresholds) => {
+    if (isNaN(value)) {
+        return 0;
+    }
+
     if (thresholds.a.lower_bound <= value && value < thresholds.a.upper_bound) {
         return 0;
     }

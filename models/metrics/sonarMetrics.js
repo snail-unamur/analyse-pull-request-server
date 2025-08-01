@@ -2,6 +2,7 @@ import askSonar from "../../api/sonarRequest.js";
 
 const METRIC_SOURCE = 'Sonar';
 const METRIC_WITH_PERIODS = ['new_coverage','new_lines'];
+const METRIC_DEVIDED_BY_FILE = ['complexity','cognitive_complexity'];
 
 const retrieveSonarMetrics = async (githubHead, metrics, prNumber) => {
     const sonarMetrics = metrics.filter(metric => metric.source === METRIC_SOURCE);
@@ -15,6 +16,8 @@ const retrieveSonarMetrics = async (githubHead, metrics, prNumber) => {
     const response = await askSonar(projectKey, prNumber, metricsQuery);
     const data = await response.json();
 
+    const nbFiles = data.component.measures.find(m => m.metric === 'files').value;
+
     return data.component.measures.map(measure => {
         const metric = sonarMetrics.find(m => m.id === measure.metric);
 
@@ -22,6 +25,10 @@ const retrieveSonarMetrics = async (githubHead, metrics, prNumber) => {
 
         if (METRIC_WITH_PERIODS.includes(measure.metric)) {
             value = measure.periods[0].value;
+        }
+
+        if (METRIC_DEVIDED_BY_FILE.includes(measure.metric)) {
+            value = value / nbFiles;
         }
 
         return {
