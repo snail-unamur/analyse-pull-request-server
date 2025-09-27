@@ -13,4 +13,4 @@ from Class c
 where 
   c.getFile().isSourceFile() and 
   not c.getQualifiedName().matches("%test%")
-select c.getFile().getRelativePath(), c.getEfferentCoupling()
+select c.getFile().getRelativePath(), c.getMetrics().getEfferentCoupling()
