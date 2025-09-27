@@ -1,5 +1,5 @@
 {
-    "complexity": {
+    "cyclomatic_complexity": {
         "name": "Cyclomatic",
         "fullName": "Cyclomatic Complexity",
         "description": "A quantitative metric used to calculate the number of paths through the code."
@@ -29,7 +29,7 @@
         "fullName": "Modified files",
         "description": "The number of modified files."
     },
-    "lackOfCohesion": {
+    "lack_of_cohesion": {
         "name": "Cohesion",
         "fullName": "Lack of Cohesion",
         "description": "The Chidamber-Kemerer lack of cohesion metric."

@@ -6,6 +6,7 @@ import calculateInstability from "./instabilityCalculation.js";
 export const AFFERENT_COUPLING_CODEQL_ID = 'afferent-coupling';
 export const EFFERENT_COUPLING_CODEQL_ID = 'efferent-coupling';
 export const LACK_OF_COHESION_CODEQL_ID = 'lack-cohesion-ck';
+export const CYCLOMATIC_COMPLEXITY_CODE_ID = 'cyclomatic-complexity';
 
 const METRIC_SOURCE = 'CodeQL';
 
@@ -47,12 +48,14 @@ export const extractInstabilityMetricsFromArtifact = (codeQLArtefact) => {
 
     const afferentMetric = allMetrics.filter(m => m.ruleId.includes(AFFERENT_COUPLING_CODEQL_ID));
     const efferentMetric = allMetrics.filter(m => m.ruleId.includes(EFFERENT_COUPLING_CODEQL_ID));
+    let count = 0;
 
     return afferentMetric.map(m => {
         const afferent = parseFloat(m.value) || 0;
-        const efferent = parseFloat(efferentMetric.find(ef => ef.message.text === m.message.text)?.value) || 0;
+        const efferent = parseFloat(efferentMetric.at(count).value) || 0;
 
         const instability = calculateInstability(afferent, efferent);
+        count++;
 
         return {
             path: m.message.text,
@@ -72,6 +75,17 @@ export const extractCohesionMetricsFromArtifact = (codeQLArtefact) => {
     }))
 }
 
+export const extractCyclomaticComplexity = (codeQLArtefact) => {
+    const allMetrics = codeQLArtefact.runs[0].properties.metricResults;
+
+    const complexityMetric = allMetrics.filter(m => m.ruleId.includes(CYCLOMATIC_COMPLEXITY_CODE_ID));
+
+    return complexityMetric.map(m => ({
+        path: m.message.text,
+        value: m.value
+    }))
+}
+
 const metricStrategies = [
     {
         id: 'instability',
@@ -81,12 +95,19 @@ const metricStrategies = [
         aggregate: mean,
     },
     {
-        id: 'lackOfCohesion',
+        id: 'lack_of_cohesion',
         extract: extractCohesionMetricsFromArtifact,
         filter: (metrics, modifiedFiles) =>
             metrics.filter(metric => modifiedFiles.includes(metric.path)),
         aggregate: mean,
     },
+    {
+        id: 'cyclomatic_complexity',
+        extract: extractCyclomaticComplexity,
+        filter: (metrics, modifiedFiles) =>
+            metrics.filter(metric => modifiedFiles.includes(metric.path)),
+        aggregate: mean,
+    }
 ];
 
 export default retrieveCodeQLMetrics;

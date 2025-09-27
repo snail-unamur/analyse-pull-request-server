@@ -12,6 +12,6 @@ import java
 
 from Class c
 where
-  c.inSource() and
+  c.getFile().isSourceFile() and
   not c.getQualifiedName().matches("%test%")
-select c.getLocation().getFile().getRelativePath(), c.getMetrics().getLackOfCohesionCK()
+select c.getFile().getRelativePath(), c.getMetrics().getLackOfCohesionCK()
