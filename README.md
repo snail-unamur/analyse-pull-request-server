@@ -59,7 +59,7 @@ npm start
 
 Make sure you have a properly configured .env file in your project directory.
 
-In the VSC plugin, the base url must be "<url>/api".
+In the VSC plugin, the base url must be "\<url\>/api".
 
 ## 🚀 Run for Production
 
