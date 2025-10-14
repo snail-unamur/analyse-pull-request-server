@@ -75,7 +75,7 @@ The server runs inside a Docker container for production.
 Make sure you have a properly configured .env file in your project directory.
 
     ```bash
-    docker run -d --name pull-request-analyse-server -p 3000:3000 --env-file .env pull-request-analyse-server
+    docker run -d --name precog-server -p 3000:3000 --env-file .env precog-server
     ```
 
 This command injects the .env variables at runtime, keeping your secrets out of the image.
