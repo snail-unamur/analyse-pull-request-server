@@ -68,7 +68,7 @@ The server runs inside a Docker container for production.
 1. Build the Docker image
 
     ```bash
-    docker build -t pull-request-analyse-server .
+    docker build -t precog-server .
     ```
 
 2. Run the container with environment variables
