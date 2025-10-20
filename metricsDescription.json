@@ -2,7 +2,7 @@
     "cyclomatic_complexity": {
         "name": "Cyclomatic",
         "fullName": "Cyclomatic Complexity",
-        "description": "A quantitative metric used to calculate the number of paths through the code."
+        "description": "number of paths through the code."
     },
     "cognitive_complexity": {
         "name": "Cognitive",
@@ -17,7 +17,7 @@
     "instability": {
         "name": "Instability",
         "fullName": "Instability",
-        "description": "The relative susceptibility to breaking changes."
+        "description": "the degree of incoming and outgoing dependencies."
     },
     "new_coverage": {
         "name": "Coverage",
@@ -30,8 +30,8 @@
         "description": "The number of modified files."
     },
     "lack_of_cohesion": {
-        "name": "Cohesion",
+        "name": "LCOM",
         "fullName": "Lack of Cohesion",
-        "description": "The Chidamber-Kemerer lack of cohesion metric."
+        "description": "measures whether a class represents one abstraction (good) or multiple abstractions (bad)."
     }
 }
