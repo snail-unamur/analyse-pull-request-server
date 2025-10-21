@@ -2,7 +2,7 @@
     "cyclomatic_complexity": {
         "name": "Cyclomatic",
         "fullName": "Cyclomatic Complexity",
-        "description": "number of paths through the code."
+        "description": "number of independent paths through the code."
     },
     "cognitive_complexity": {
         "name": "Cognitive",
