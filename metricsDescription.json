@@ -31,7 +31,7 @@
     },
     "lack_of_cohesion": {
         "name": "LCOM",
-        "fullName": "Lack of Cohesion",
+        "fullName": "LCOM",
         "description": "measures whether a class represents one abstraction (good) or multiple abstractions (bad)."
     }
 }
