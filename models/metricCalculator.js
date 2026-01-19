@@ -33,7 +33,7 @@ export const calculate = async (githubHead, configuration, prNumber) => {
         prNumber: prNumber,
         radarMetrics: radarMetricThresholds,
         defaultMetrics: defaultCalculatedMetrics,
-        riskValue: riskValue,
+        difficultyScore: riskValue,
     };
 }
 
